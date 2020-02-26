@@ -16,25 +16,19 @@ class Pos extends CT_Controller {
     //주문정보 receiveData api
 	public function receiveData() {
         
-        $receiveArray = array(
-            'rCode' => RES_CODE_SUCCESS,
-            'error' =>  'errorCode',
-                        'errorMessage',
-            'order' =>  null,
-            'orderProduct' => null,
-            'orderProductoption' => null,
-            'payment' => null,
-            'cardPaymentdetail' => null,
-            'couponPaymentdetail' => null,
+        $message = array(
+            'rCode'         => RES_CODE_SUCCESS,
+            'errorCode'     => null,
+            'errorMessage'  => null,
         );
+        $order = array();
+        $order = $this->input->post('order',true);  // 왕창 받아오자!
 
-        $receiveArray = $this->input->post('receiveArray',true);  // 왕창 받아오자!
-
-        if (!$receiveArray) {      
-            $receiveArray['rCode'] = "0001";
-            $receiveArray['error']['errorCode'] = "0001";
-            $receiveArray['error']['errorMessage'] = "정상적으로 수신되지 않았습니다.";
-            echo json_encode($receiveArray);
+        if (!$order) {      
+            $message['rCode'] = "0001";
+            $message['errorCode'] = "0001";
+            $message['errorMessage'] = "정상적으로 수신되지 않았습니다.";
+            echo json_encode($message);
             exit;
         }
         //쪼개서 넣기
@@ -104,8 +98,9 @@ class Pos extends CT_Controller {
         
         echo json_encode($receiveArray);
         return
-
-    }        
+    
+    }
+            
     public function ticket_machine_mileage_insert() {	     
         $UnivCode                     = $this->input->post('UnivCode',true);
         $saletotal_date               = $this->input->post('saletotal_date',true);  //--* 매출일자

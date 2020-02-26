@@ -13,93 +13,113 @@ class Pos extends CT_Controller {
 
     }
 
-    //주문정보 receiveData api
-	public function receiveData() {
+    //주문정보 receive api
+	public function receive() {
         
+        $logs = array(
+            'sLogFileId'    => time() . '_' . substr(md5(uniqid(rand(), true)), 0, 5),
+            'sLogPath'        => BASEPATH . '../../logs/ReceiveData/' . date('Ymd') . '_data.log',
+            'bLogable'        => true
+        );
+
+        $sLogFileId    = (!empty($logs['sLogFileId']) && isset($logs['sLogFileId'])) ? $logs['sLogFileId'] : time() . '_' . substr(md5(uniqid(rand(), true)), 0, 5);
+        $sLogPath    = (!empty($logs['sLogPath']) && isset($logs['sLogPath'])) ? $logs['sLogPath'] : BASEPATH . '../../logs/ReceiveData/' . date('Ymd') . '_data.log';
+        $bLogable    = (!empty($logs['bLogable']) && isset($logs['bLogable'])) ? $logs['bLogable'] : true;
+
         $message = array(
             'rCode'         => RES_CODE_SUCCESS,
             'errorCode'     => null,
-            'errorMessage', => null,
+            'errorMessage'  => null,
         );
-        $order = array();
-        $order = $this->input->post('order',true);  // 왕창 받아오자!
+        $this->common_lib->writeLog("[{$sLogFileId}] -------------------------------- START --------------------------------", $sLogPath, $bLogable);
 
-        if (!$order) {      
-            $message['rCode'] = "0001";
-            $message['errorCode'] = "0001";
-            $message['errorMessage'] = "정상적으로 수신되지 않았습니다.";
-            echo json_encode($message);
-            exit;
-        }
-        //쪼개서 넣기
-        // 1.order 테이블
-        $insertDB = "";
-        $insertDB = $this->API->insertDBorder($receiveArray['order']);
-        if($insertDB !== RES_CODE_SUCCESS) {
-            $receiveArray['rCode'] = "0011";
-            $receiveArray['error']['errorCode'] = "0011";
-            $receiveArray['error']['errorMessage'] = "order 테이블이 처리되지 않았습니다.";
-            echo json_encode($receiveArray);
-            exit;
-        }
-        // 2. orderProduct 테이블
-        $insertDB = "";
-        $insertDB = $this->API->insertDBorderProduct($receiveArray['orderProduct']);
-        if($insertDB !== RES_CODE_SUCCESS) {
-            $receiveArray['rCode'] = "0012";
-            $receiveArray['error']['errorCode'] = "0012";
-            $receiveArray['error']['errorMessage'] = "orderProduct 테이블이 처리되지 않았습니다.";
-            echo json_encode($receiveArray);
-            exit;
-        }
-        // 3. orderProductOption 테이블
-        $insertDB = "";
-        $insertDB = $this->API->insertDBorderProductOption($receiveArray['orderProductOption']);
-        if($insertDB !== RES_CODE_SUCCESS) {
-            $receiveArray['rCode'] = "0013";
-            $receiveArray['error']['errorCode'] = "0013";
-            $receiveArray['error']['errorMessage'] = "orderProductOption 테이블이 처리되지 않았습니다.";
-            echo json_encode($receiveArray);
-            exit;
-        }
+        try {
         
-        // 4. payment 테이블
-        $insertDB = "";
-        $insertDB = $this->API->insertDBpayment($receiveArray['payment']);
-        if($insertDB !== RES_CODE_SUCCESS) {
-            $receiveArray['rCode'] = "0014";
-            $receiveArray['error']['errorCode'] = "0014";
-            $receiveArray['error']['errorMessage'] = "payment 테이블이 처리되지 않았습니다.";
+            $order = array();
+            $order = $this->input->post('order',true);  // 왕창 받아오자!
+    
+            if (!$order) {      
+                $message['rCode'] = "0001";
+                $message['errorCode'] = "0001";
+                $message['errorMessage'] = "정상적으로 수신되지 않았습니다.";
+                echo json_encode($message);
+                exit;
+            }
+            //쪼개서 넣기
+            // 1.order 테이블
+            $insertDB = "";
+            $insertDB = $this->API->insertDBorder($receiveArray['order']);
+            if($insertDB !== RES_CODE_SUCCESS) {
+                $message['rCode'] = "0011";
+                $message['errorCode'] = "0011";
+                $message['errorMessage'] = "order 테이블이 처리되지 않았습니다.";
+                echo json_encode($message);
+                exit;
+            }
+            // 2. orderProduct 테이블
+            $insertDB = "";
+            $insertDB = $this->API->insertDBorderProduct($receiveArray['orderProduct']);
+            if($insertDB !== RES_CODE_SUCCESS) {
+                $message['rCode'] = "0012";
+                $message['errorCode'] = "0012";
+                $message['errorMessage'] = "orderProduct 테이블이 처리되지 않았습니다.";
+                echo json_encode($message);
+                exit;
+            }
+            // 3. orderProductOption 테이블
+            $insertDB = "";
+            $insertDB = $this->API->insertDBorderProductOption($receiveArray['orderProductOption']);
+            if($insertDB !== RES_CODE_SUCCESS) {
+                $message['rCode'] = "0013";
+                $message['errorCode'] = "0013";
+                $message['errorMessage'] = "orderProductOption 테이블이 처리되지 않았습니다.";
+                echo json_encode($message);
+                exit;
+            }
+            
+            // 4. payment 테이블
+            $insertDB = "";
+            $insertDB = $this->API->insertDBpayment($receiveArray['payment']);
+            if($insertDB !== RES_CODE_SUCCESS) {
+                $message['rCode'] = "0014";
+                $message['errorCode'] = "0014";
+                $message['errorMessage'] = "payment 테이블이 처리되지 않았습니다.";
+                echo json_encode($message);
+                exit;
+            }
+    
+            // 5. cardPaymentdetail 테이블
+            $insertDB = "";
+            $insertDB = $this->API->insertDBcardPaymentdetail($receiveArray['cardPaymentdetail']);
+            if($insertDB !== RES_CODE_SUCCESS) {
+                $message['rCode'] = "0015";
+                $message['errorCode'] = "0015";
+                $message['errorMessage'] = "cardPaymentdetail 테이블이 처리되지 않았습니다.";
+                echo json_encode($message);
+                exit;
+            }
+            
+            // 6. couponPaymentdetail 테이블
+            $insertDB = "";
+            $insertDB = $this->API->insertDBcouponPaymentdetail($receiveArray['couponPaymentdetail']);
+            if($insertDB !== RES_CODE_SUCCESS) {
+                $message['rCode'] = "0016";
+                $message['errorCode'] = "0016";
+                $message['errorMessage'] = "couponPaymentdetail 테이블이 처리되지 않았습니다.";
+                echo json_encode($message);
+                exit;
+            }
+            
             echo json_encode($receiveArray);
-            exit;
+            return
+        } catch (File_exception $e) {
+        
         }
+        $this->common_lib->writeLog("[{$sLogFileId}] result=" . json_encode($results), $sLogPath, $bLogable);
+        $this->common_lib->writeLog("[{$sLogFileId}] -------------------------------- END --------------------------------", $sLogPath, $bLogable);
+        return $results;
+    }    
 
-        // 5. cardPaymentdetail 테이블
-        $insertDB = "";
-        $insertDB = $this->API->insertDBcardPaymentdetail($receiveArray['cardPaymentdetail']);
-        if($insertDB !== RES_CODE_SUCCESS) {
-            $receiveArray['rCode'] = "0015";
-            $receiveArray['error']['errorCode'] = "0015";
-            $receiveArray['error']['errorMessage'] = "cardPaymentdetail 테이블이 처리되지 않았습니다.";
-            echo json_encode($receiveArray);
-            exit;
-        }
-        
-        // 6. couponPaymentdetail 테이블
-        $insertDB = "";
-        $insertDB = $this->API->insertDBcouponPaymentdetail($receiveArray['couponPaymentdetail']);
-        if($insertDB !== RES_CODE_SUCCESS) {
-            $receiveArray['rCode'] = "0016";
-            $receiveArray['error']['errorCode'] = "0016";
-            $receiveArray['error']['errorMessage'] = "couponPaymentdetail 테이블이 처리되지 않았습니다.";
-            echo json_encode($receiveArray);
-            exit;
-        }
-        
-        echo json_encode($receiveArray);
-        return
-
-    }        
     public function ticket_machine_mileage_insert() {	     
         $UnivCode                     = $this->input->post('UnivCode',true);
         $saletotal_date               = $this->input->post('saletotal_date',true);  //--* 매출일자
