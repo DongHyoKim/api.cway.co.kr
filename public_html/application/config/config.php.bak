@@ -24,6 +24,7 @@
 */
 $config['site_url'] = 'api.cway.co.kr';
 $config['base_url'] = 'http://api.cway.co.kr';
+$config['site_root'] = '/www/dev.cooltown.me/webdata'; // 웹 루트 물리 경로
 
 /*
 |--------------------------------------------------------------------------

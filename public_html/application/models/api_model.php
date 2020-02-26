@@ -435,6 +435,7 @@ class Api_model extends CI_Model {
         $this->db->query($sp,$params); 
         return  $this->db->affected_rows();    
     }
+
     // insertDBcouponPaymentdetail
     function insertDBcouponPaymentdetail($receiveDetailarray) {
         global $db;
@@ -480,4 +481,5 @@ class Api_model extends CI_Model {
         $this->db->query($sp,$params); 
         return  $this->db->affected_rows();    
     }
-?>
+
+}

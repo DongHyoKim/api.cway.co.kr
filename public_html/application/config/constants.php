@@ -36,6 +36,7 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+define('LOG_FILE_AUTO_DELETE_DATE', 30); // 지난 로그 삭제할 일자 (30일후 로그 삭제)
 define('RES_CODE_SUCCESS','0000');
 
 

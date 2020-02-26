@@ -64,6 +64,48 @@ function autoLink($text){
 	return $text;
 }
 
+function writeLog($str='', $filepath='' )
+{
+    /**
+    * 기존 common_service/write_log
+    */    
+
+    $CI =& get_instance();
+    $CI->load->helper('file');
+    $sLogPath = (empty($filepath)) ? $_SERVER['DOCUMENT_ROOT'].'/../logs/'.date('Ymd', time()).'.log' : $filepath;
+    $sLog = '['.date('Y-m-d H:i:s').'] '.$str."\n";
+    
+    log_auto_file_delete($sLogPath);
+    return write_file($sLogPath, $sLog, 'a+');
+}
+
+function log_auto_file_delete($dir)
+{
+    if(is_dir($dir)) {
+        if($dh = opendir($dir)) {
+            while(($entry = readdir($dh)) !== false) {
+                if($entry == '.' || $entry == '..')
+                    continue;
+                $subdir = $dir.'/'.$entry;
+                if(is_dir($subdir)) {
+                    log_auto_file_delete($subdir);
+                } else {
+                    if($entry == 'index.php')
+                        continue;
+                    $sfile = $dir.'/'.$entry;
+                    $mtime = @filemtime($sfile);
+                    // 최종수정일이 30일 이상인 파일만 삭제
+                    if(file_exists($sfile) && (time() - $mtime <= 24*60*60*LOG_FILE_AUTO_DELETE_DATE))
+                        continue;
+                    // 파일삭제
+                    @unlink($sfile);
+                }
+            }
+            closedir($dh);
+        }
+    }
+}
+
 // checkOrder
 function checkOrder($Order) {
     $createdAt              = trim($Order['createdAt']);                     // 등록일              s30
@@ -85,7 +127,7 @@ function checkOrder($Order) {
     $totalAmount            = $Order['totalAmount'];                         // 총주문금액          n
     $paymentAmount          = $Order['paymentAmount'];                       // 결재금액            n
     $discountAmount         = $Order['discountAmount'];                      // 총할인금액          n
-    $discountRate           = $Order['discountRate'];                        // 할인율?             s
+    //$discountRate           = $Order['discountRate'];                        // 할인율?             s
     $couponAmount           = $Order['couponAmount'];                        // 쿠폰금액            n
     $cashableAmount         = $Order['cashableAmount'];                      // 현금화금액          n
     $taxationAmount         = $Order['taxationAmount'];                      // 과세대상금액        n
@@ -93,8 +135,8 @@ function checkOrder($Order) {
     $totalTax               = $Order['totalTax'];                            // 부가세액            n
     $tableNo                = trim($Order['tableNo']);                       // 테이블번호          s3
     $orgBillNo              = trim($Order['orgBillNo']);                     // 원거래영수번호      s30  반품건원거래번호
-    $salesDayOrderSeq       = trim($Order['salesDayOrderSeq']);              // ?
-    $orgSalesDayOrderSeq    = trim($Order['orgSalesDayOrderSeq']);           // ?
+    //$salesDayOrderSeq       = trim($Order['salesDayOrderSeq']);              // ?
+    //$orgSalesDayOrderSeq    = trim($Order['orgSalesDayOrderSeq']);           // ?
     $orderStatus            = trim($Order['orderStatus']);                   // 주문상태            s5   1001주문중 9999주문취소 1000픽업주문취소 1003주문접수 1005주문확인 2007상품준비중 2009픽업대기 2020픽업완료 2085픽업지연 2090픽업지연완료 2099픽업미완료
     $paymentStatus          = trim($Order['paymentStatus']);                 // 결재상태            s2   S성공 F실패(부분) F결재시 부분실패
     $cancelBillNo           = trim($Order['cancelBillNo']);                  // 취소영수번호        s30  원거래건의취소영수번호
@@ -108,4 +150,49 @@ function checkOrder($Order) {
     $closeYn                = trim($Order['closeYn']);                       // 마감처리여부        s255
     $closeDate              = trim($Order['closeDate']);                     // 마감일자            s255
     $salesDaySeq            = $Order['salesDaySeq'];                         // 영업일자순번        n
+
+    $returnarr = array(
+        //'UnivCode'               => $UnivCode,
+        'createdAt'              => $createdAt,
+        'updatedAt'              => $updatedAt,
+        'billNo'                 => $billNo,
+        'headOfficeId'           => $headOfficeId,
+        'franchiseId'            => $franchiseId,
+        'franchiseCd'            => $franchiseCd,
+        'deviceId'               => $deviceId,
+        'deviceSeq'              => $deviceSeq,
+        'posNo'                  => $posNo,
+        'channelType'            => $channelType,
+        'saleDay'                => $saleDay,
+        'outerBillno'            => $outerBillno,
+        'tradeType'              => $tradeType,
+        'serviceType'            => $serviceType,
+        'salesTarget'            => $salesTarget,
+        'totalAmount'            => $totalAmount,
+        'paymentAmount'          => $paymentAmount,
+        'discountAmount'         => $discountAmount,
+        'couponAmount'           => $couponAmount,
+        'cashableAmount'         => $cashableAmount,
+        'taxationAmount'         => $taxationAmount,
+        'dutyAmount'             => $dutyAmount,
+        'totalTax'               => $totalTax,
+        'tableNo'                => $tableNo,
+        'orgBillNo'              => $orgBillNo,
+        'orderStatus'            => $orderStatus,
+        'paymentStatus'          => $paymentStatus,
+        'cancelBillNo'           => $cancelBillNo,
+        'receiptPrintCountType'  => $receiptPrintCountType,
+        'exchangePrintCountType' => $exchangePrintCountType,
+        'additionalInfo'         => $additionalInfo,
+        'additionalInfo'         => $additionalInfo,
+        'filler1'                => $filler1,
+        'filler2'                => $filler2,
+        'filler3'                => $filler3,
+        'filler4'                => $filler4,
+        'closeYn'                => $closeYn,
+        'closeDate'              => $closeDate,
+        'salesDaySeq'            => $salesDaySeq,
+    );
+
+    return $returnarr;
 }

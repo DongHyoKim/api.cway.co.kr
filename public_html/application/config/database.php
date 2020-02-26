@@ -71,10 +71,10 @@ $db['default']['stricton'] = FALSE;
 $json_env_array = array();
 
 if(!isset($_POST['UnivCode'])) {
-   $json_env_array['status'] = -1;    
-   $json_env_array['message'] = "대학교코드가 존재하지 않습니다.";
-   echo json_encode($json_env_array);      
-   exit;  
+    $json_env_array['status'] = -1;    
+    $json_env_array['message'] = "대학교코드가 존재하지 않습니다.";
+    echo json_encode($json_env_array);      
+    exit;  
 }
 
 $DB_CONNECTION = array(
@@ -91,13 +91,13 @@ $DB_CONNECTION = array(
   , "00112"=> array("hostname"=>"203.253.68.97,8433",  "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00112001") //Hufs
 );
 
-if(! array_key_exists ($_POST['UnivCode'] , $DB_CONNECTION) ){
-   $json_env_array['status'] = -1;    
-   $json_env_array['message'] = "존재하지 않는 대학코드입니다.";
-   echo json_encode($json_env_array);      
-   exit;
-}
 
+if(! array_key_exists ($_POST['UnivCode'] , $DB_CONNECTION) ){
+    $json_env_array['status'] = -1;    
+    $json_env_array['message'] = "존재하지 않는 대학코드입니다.";
+    echo json_encode($json_env_array);      
+    exit;
+}
 
 $db['default']['hostname'] = $DB_CONNECTION[$_POST['UnivCode']]['hostname'];
 $db['default']['username'] = $DB_CONNECTION[$_POST['UnivCode']]['username'];
