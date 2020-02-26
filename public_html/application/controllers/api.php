@@ -16,19 +16,25 @@ class Pos extends CT_Controller {
     //주문정보 receiveData api
 	public function receiveData() {
         
-        $message = array(
-            'rCode'         => RES_CODE_SUCCESS,
-            'errorCode'     => null,
-            'errorMessage', => null,
+        $receiveArray = array(
+            'rCode' => RES_CODE_SUCCESS,
+            'error' =>  'errorCode',
+                        'errorMessage',
+            'order' =>  null,
+            'orderProduct' => null,
+            'orderProductoption' => null,
+            'payment' => null,
+            'cardPaymentdetail' => null,
+            'couponPaymentdetail' => null,
         );
-        $order = array();
-        $order = $this->input->post('order',true);  // 왕창 받아오자!
 
-        if (!$order) {      
-            $message['rCode'] = "0001";
-            $message['errorCode'] = "0001";
-            $message['errorMessage'] = "정상적으로 수신되지 않았습니다.";
-            echo json_encode($message);
+        $receiveArray = $this->input->post('receiveArray',true);  // 왕창 받아오자!
+
+        if (!$receiveArray) {      
+            $receiveArray['rCode'] = "0001";
+            $receiveArray['error']['errorCode'] = "0001";
+            $receiveArray['error']['errorMessage'] = "정상적으로 수신되지 않았습니다.";
+            echo json_encode($receiveArray);
             exit;
         }
         //쪼개서 넣기
