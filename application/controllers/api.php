@@ -14,7 +14,7 @@ class Pos extends CT_Controller {
     }
 
     //주문정보 receive api
-	public function receive() {
+	public function receiveData() {
         
         $logs = array(
             'sLogFileId'    => time() . '_' . substr(md5(uniqid(rand(), true)), 0, 5),
@@ -27,29 +27,47 @@ class Pos extends CT_Controller {
         $bLogable    = (!empty($logs['bLogable']) && isset($logs['bLogable'])) ? $logs['bLogable'] : true;
 
         $message = array(
-            'rCode'         => RES_CODE_SUCCESS,
-            'errorCode'     => null,
-            'errorMessage'  => null,
+            'rCode' => RES_CODE_SUCCESS,
+            'error' => array (  'errorCode'     => null,
+                                'errorMessage'  => null, ),
         );
         $this->common_lib->writeLog("[{$sLogFileId}] -------------------------------- START --------------------------------", $sLogPath, $bLogable);
 
         try {
         
-            $order = array();
-            $order = $this->input->post('order',true);  // 왕창 받아오자!
-    
-            if (!$order) {      
+            $receiveData = array();
+            $receiveHeader = array();
+            $UnivCode = "";   // UnivCode는 헤더에서 받아오기로 함 2020-02-26 고병수차장
+            // json data Receive
+            $receiveData = $this->input->post('Order',true);  // json data name :Order
+            $receiveHeader = get_headers($receiveData);
+            // Header에서 UnivCode 추출
+            if (!$receiveHeader['UnivCode']) {
                 $message['rCode'] = "0001";
-                $message['errorCode'] = "0001";
-                $message['errorMessage'] = "정상적으로 수신되지 않았습니다.";
+                $message['error']['errorCode'] = "0001";
+                $message['error']['errorMessage'] = "UnivCode가 header에 존재하지 않습니다.";
+                echo json_encode($message);
+                exit;
+            } else {
+                $UnivCode = $receiveHeader['UnivCode'];
+            }
+            // header UnivCode log Insert
+            $this->common_lib->writeLog("[{$sLogFileId}] UnivCode=" . json_encode($UnivCode), $sLogPath, $bLogable);
+            
+            if (!$receiveData) {      
+                $message['rCode'] = "0002";
+                $message['error']['errorCode'] = "0002";
+                $message['error']['errorMessage'] = "Order가 정상적으로 수신되지 않았습니다.";
                 echo json_encode($message);
                 exit;
             }
-            //쪼개서 넣기
+            //array dividing
+            $Order = array();
+            $orderProduct = array();
             // 1.order 테이블
-            $insertDB = "";
-            $insertDB = $this->API->insertDBorder($receiveArray['order']);
-            if($insertDB !== RES_CODE_SUCCESS) {
+            $insertOrder = "";
+            $insertOrder = checkOrder($receiveData);
+            if($insertOrder !== RES_CODE_SUCCESS) {
                 $message['rCode'] = "0011";
                 $message['errorCode'] = "0011";
                 $message['errorMessage'] = "order 테이블이 처리되지 않았습니다.";

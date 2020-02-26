@@ -63,3 +63,49 @@ function autoLink($text){
 	$text = preg_replace("/href='www/", "href='http://www", $text);
 	return $text;
 }
+
+// checkOrder
+function checkOrder($Order) {
+    $createdAt              = trim($Order['createdAt']);                     // 등록일              s30
+    $updatedAt              = trim($Order['updatedAt']);                     // 수정일              s30
+    $deletedAt              = trim($Order['deletedAt']);                     // 삭제일              s30
+    $billNo                 = trim($Order['billNo']);                        // 영수번호*           s30
+    $headOfficeId           = trim($Order['headOfficeId']);                  // 본사id              s30
+    $franchiseId            = trim($Order['franchiseId']);                   // 가맹점id            s30
+    $franchiseCd            = trim($Order['franchiseCd']);                   // 지점코드            s30  연동처리
+    $deviceId               = trim($Order['deviceId']);                      // 기기id              s30 
+    $deviceSeq              = $Order['deviceSeq'];                           // 기기번호            n
+    $posNo                  = trim($Order['posNo']);                         // 포스번호*           s5   연동 기기번호
+    $channelType            = trim($Order['channelType']);                   // 채널구분            s10  ch01:kiosk
+    $saleDay                = $Order['saleDay'];                             // 영업일*             s10  YYYY-MM-DD
+    $outerBillno            = trim($Order['outerBillno']);                   // 외부연동영수번호     s30
+    $tradeType              = trim($Order['tradeType']);                     // 거래구분            s2   S:매출 C:취소
+    $serviceType            = trim($Order['serviceType']);                   // 매장/포장           s2   S:매장 P:포장
+    $salesTarget            = trim($Order['salesTarget']);                   // 서비스대상          s2   G:일반 S:직원
+    $totalAmount            = $Order['totalAmount'];                         // 총주문금액          n
+    $paymentAmount          = $Order['paymentAmount'];                       // 결재금액            n
+    $discountAmount         = $Order['discountAmount'];                      // 총할인금액          n
+    $discountRate           = $Order['discountRate'];                        // 할인율?             s
+    $couponAmount           = $Order['couponAmount'];                        // 쿠폰금액            n
+    $cashableAmount         = $Order['cashableAmount'];                      // 현금화금액          n
+    $taxationAmount         = $Order['taxationAmount'];                      // 과세대상금액        n
+    $dutyAmount             = $Order['dutyAmount'];                          // 면세금액            n
+    $totalTax               = $Order['totalTax'];                            // 부가세액            n
+    $tableNo                = trim($Order['tableNo']);                       // 테이블번호          s3
+    $orgBillNo              = trim($Order['orgBillNo']);                     // 원거래영수번호      s30  반품건원거래번호
+    $salesDayOrderSeq       = trim($Order['salesDayOrderSeq']);              // ?
+    $orgSalesDayOrderSeq    = trim($Order['orgSalesDayOrderSeq']);           // ?
+    $orderStatus            = trim($Order['orderStatus']);                   // 주문상태            s5   1001주문중 9999주문취소 1000픽업주문취소 1003주문접수 1005주문확인 2007상품준비중 2009픽업대기 2020픽업완료 2085픽업지연 2090픽업지연완료 2099픽업미완료
+    $paymentStatus          = trim($Order['paymentStatus']);                 // 결재상태            s2   S성공 F실패(부분) F결재시 부분실패
+    $cancelBillNo           = trim($Order['cancelBillNo']);                  // 취소영수번호        s30  원거래건의취소영수번호
+    $receiptPrintCountType  = trim($Order['receiptPrintCountType']);         // 영수증출력갯수타입  s20
+    $exchangePrintCountType = trim($Order['exchangePrintCountType']);        // 교환건출력갯수타입  s20
+    $additionalInfo         = trim($Order['additionalInfo']);                // 부가정보            json
+    $filler1                = trim($Order['filler1']);                       // 비고1               s500
+    $filler2                = trim($Order['filler2']);                       // 비고2               s500
+    $filler3                = trim($Order['filler3']);                       // 비고3               s500
+    $filler4                = trim($Order['filler4']);                       // 비고4               s500
+    $closeYn                = trim($Order['closeYn']);                       // 마감처리여부        s255
+    $closeDate              = trim($Order['closeDate']);                     // 마감일자            s255
+    $salesDaySeq            = $Order['salesDaySeq'];                         // 영업일자순번        n
+}

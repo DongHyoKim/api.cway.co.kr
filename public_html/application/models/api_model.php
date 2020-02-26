@@ -39,9 +39,9 @@ class Api_model extends CI_Model {
     }
 
     // insertDBorder
-    function insertDBorder($receiveDetailarray) {
+    function insertOrder($order) {
         global $db;
-        foreach($receiveDetailarray as $k => $v) {
+        foreach($order as $k => $v) {
             if(isset($v['UnivCode'])) $UnivCode = trim($v['UnivCode']);      // 대학코드*           s5
             $createdAt              = trim($v['createdAt']);                 // 등록일              s30
             $updatedAt              = trim($v['updatedAt']);                 // 수정일              s30
