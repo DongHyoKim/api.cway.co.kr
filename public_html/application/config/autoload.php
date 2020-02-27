@@ -53,8 +53,8 @@ $autoload['packages'] = array();
 */
 
 //$autoload['libraries'] = array('database', 'AESUtil');
-//$autoload['libraries'] = array( 'AESUtil', 'database', 'core/common_lib', 'core/File_exception', 'core/Db_exception');
-$autoload['libraries'] = array( 'AESUtil', 'core/common_lib', 'core/File_exception', 'core/Db_exception');
+$autoload['libraries'] = array( 'AESUtil', 'database', 'core/common_lib', 'core/File_exception', 'core/Db_exception');
+//$autoload['libraries'] = array( 'AESUtil', 'core/common_lib', 'core/File_exception', 'core/Db_exception');
 
 
 /*

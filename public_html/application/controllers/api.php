@@ -36,12 +36,12 @@ class Api extends CT_Controller {
         try {
             
             $receiveData = array();
-            $receiveHeader = apache_request_headers();
-            $UnivCode = "";   // UnivCode는 헤더에서 받아오기로 함 2020-02-26 고병수차장
+            //$receiveHeader = apache_request_headers();
+            // UnivCode는 헤더에서 받아오기로 함 2020-02-26 고병수차장 autoload->database.php에서 처리함.
             // json data Receive
             $receiveData = json_decode(file_get_contents('php://input'), true);  // json data name :Order
-            $UnivCode = $receiveHeader['UnivCode'];  // 글로벌 처리
-            if (!$UnivCode) {      
+            //$UnivCode = $receiveHeader['UnivCode'];  // 글로벌 처리
+            if (!$_POST['UnivCode']) {      
                 $message['rCode'] = "0001";
                 $message['error']['errorCode'] = "0001";
                 $message['error']['errorMessage'] = "UnivCode가 Header에 존재하지 않습니다.";
@@ -49,53 +49,50 @@ class Api extends CT_Controller {
                 echo json_encode($message);
                 exit;
             }
-            writeLog("[{$sLogFileId}] UnivCode=" . json_encode($UnivCode), $sLogPath, $bLogable);
+            writeLog("[{$sLogFileId}] UnivCode=" . json_encode($_POST['UnivCode']), $sLogPath, $bLogable);
 
             //array dividing
             // 각 배열의 정의
-            $order = array();                // 기본배열
-            $orderProducts = array();        // 2차원
-            $payments = array();             // 2차원
-            $orderProductOptions = array();  // 3차원
-            $cardPaymentDetail = array();    // 3차원
-            $couponPaymentDetail = array();  // 3차원
-
-            // 순서상 가장 하위(3차원) 배열부터
-            $cardPaymentDetail = $receiveData['order']['payments']['cardPaymentDetail'];
-            unset($receiveData['order']['payments']['cardPaymentDetail']);
-            $couponPaymentDetail = $receiveData['order']['payments']['couponPaymentDetail'];
-            unset($couponPaymentDetail['order']['payments']['couponPaymentDetail']);            
-            $orderProductOptions = $receiveData['order']['orderProducts']['orderProductOptions'];
-            unset($receiveData['order']['orderProducts']['orderProductOptions']);
-            // 순서상 두번째 하위(2차원) 배열
+            $order = array();                // 1단계기본배열
+            $orderProducts = array();        // 2단계
+            $payments = array();             // 2단계
+            $orderProductOptions = array();  // 3단계
+            $cardPaymentDetail = array();    // 3단계
+            $couponPaymentDetail = array();  // 3단계
+            // 배열처리된 entity들을 모두 스트링으로 만들자.
+            $receiveData['order']['additionalInfo'] = implode("",$receiveData['order']['additionalInfo']);
+            // 순서상 orderProducts/payments/order 배열 먼저 분리(단수임)
             $orderProducts = $receiveData['order']['orderProducts'];
             unset($receiveData['order']['orderProducts']);
             $payments = $receiveData['order']['payments'];
             unset($receiveData['order']['payments']);
-            // 순서상 마지막(1차원) 배열
             $order = $receiveData;
-
-
-            print_r($order);
-            print_r($orderProducts);
-            print_r($orderProductOptions);
-            print_r($payments);
-            print_r($cardPaymentDetail);
-            print_r($couponPaymentDetail);
-            exit;
             
-            if (!$order) {      
-                $message['rCode'] = "0011";
-                $message['error']['errorCode'] = "0011";
-                $message['error']['errorMessage'] = "JSON order가 처리되지 않았습니다.";
-                writeLog("[{$sLogFileId}] errorCode=" . json_encode($message['error']['errorCode']) . " errorMessage=" . json_encode($message['error']['errorMessage']), $sLogPath, $bLogable);
-                echo json_encode($message);
-                exit;
+            // 순서상 세번째 가장 하위(3차원) 배열 분리(복수 가능성)
+            foreach($orderProducts as $key => $value){
+                
+                foreach($value['orderProductOptions'] as $k => $v){
+                    if(is_array($v['additionalInfo']) $v['additionalInfo'] = implode("",$v['additionalInfo']);
+                    $orderProductOptions = $value['orderProductOptions'];
+                    print_r($orderProductOptions);
+                }
+                
+                
+                
             }
+            unset($orderProducts['orderProductOptions']);
+            //print_r($orderProducts);
+            print_r($orderProductOptions);
+
+            //print_r($orderProducts);
+            
+            exit;
+
+            
 
            // 1.order 테이블
             //배열내에 배열이 있을 경우 연속되는 스트링으로 치환
-            $Order['order']['additionalInfo'] = implode("",$order['order']['additionalInfo']);
+            
 
             // 2. orderProduct 테이블
             $insertDB = "";

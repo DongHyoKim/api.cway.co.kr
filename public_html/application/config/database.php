@@ -70,6 +70,12 @@ $db['default']['stricton'] = FALSE;
 
 $json_env_array = array();
 
+$receiveHeader = apache_request_headers();
+if(isset($receiveHeader['UnivCode'])){
+    $_POST['UnivCode'] = $receiveHeader['UnivCode'];
+}
+
+
 if(!isset($_POST['UnivCode'])) {
     $json_env_array['status'] = -1;    
     $json_env_array['message'] = "대학교코드가 존재하지 않습니다.";
