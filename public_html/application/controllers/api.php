@@ -51,19 +51,40 @@ class Api extends CT_Controller {
             }
             writeLog("[{$sLogFileId}] UnivCode=" . json_encode($UnivCode), $sLogPath, $bLogable);
 
-            //array dividing *****************************************************************************************
-            $orderProducts = array();
-            $Order = array();
-            //print_r($receiveData);
-            //exit;
-            $Order = array_splice($receiveData,42);
-            $orderProducts = array_splice($receiveData,-47);
-            //unset($receiveData['Order']['orderProducts']);
-            print_r($Order);
+            //array dividing
+            // 각 배열의 정의
+            $order = array();                // 기본배열
+            $orderProducts = array();        // 2차원
+            $payments = array();             // 2차원
+            $orderProductOptions = array();  // 3차원
+            $cardPaymentDetail = array();    // 3차원
+            $couponPaymentDetail = array();  // 3차원
+
+            // 순서상 가장 하위(3차원) 배열부터
+            $cardPaymentDetail = $receiveData['order']['payments']['cardPaymentDetail'];
+            unset($receiveData['order']['payments']['cardPaymentDetail']);
+            $couponPaymentDetail = $receiveData['order']['payments']['couponPaymentDetail'];
+            unset($couponPaymentDetail['order']['payments']['couponPaymentDetail']);            
+            $orderProductOptions = $receiveData['order']['orderProducts']['orderProductOptions'];
+            unset($receiveData['order']['orderProducts']['orderProductOptions']);
+            // 순서상 두번째 하위(2차원) 배열
+            $orderProducts = $receiveData['order']['orderProducts'];
+            unset($receiveData['order']['orderProducts']);
+            $payments = $receiveData['order']['payments'];
+            unset($receiveData['order']['payments']);
+            // 순서상 마지막(1차원) 배열
+            $order = $receiveData;
+
+
+            print_r($order);
             print_r($orderProducts);
-            
+            print_r($orderProductOptions);
+            print_r($payments);
+            print_r($cardPaymentDetail);
+            print_r($couponPaymentDetail);
             exit;
-            if (!$Order) {      
+            
+            if (!$order) {      
                 $message['rCode'] = "0011";
                 $message['error']['errorCode'] = "0011";
                 $message['error']['errorMessage'] = "JSON order가 처리되지 않았습니다.";
@@ -74,7 +95,7 @@ class Api extends CT_Controller {
 
            // 1.order 테이블
             //배열내에 배열이 있을 경우 연속되는 스트링으로 치환
-            $Order['Order']['additionalInfo'] = implode("",$Order['Order']['additionalInfo']);
+            $Order['order']['additionalInfo'] = implode("",$order['order']['additionalInfo']);
 
             // 2. orderProduct 테이블
             $insertDB = "";
