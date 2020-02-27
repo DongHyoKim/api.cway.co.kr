@@ -107,6 +107,7 @@ function log_auto_file_delete($dir)
 }
 
 // checkOrder
+/*
 function checkOrder($Order) {
     $createdAt              = trim($Order['createdAt']);                     // 등록일              s30
     $updatedAt              = trim($Order['updatedAt']);                     // 수정일              s30
@@ -195,4 +196,4 @@ function checkOrder($Order) {
     );
 
     return $returnarr;
-}
+} */

@@ -1148,3 +1148,214 @@ DEBUG - 2020-02-27 15:45:48 --> Controller Class Initialized
 DEBUG - 2020-02-27 15:45:48 --> Helper loaded: file_helper
 ERROR - 2020-02-27 15:45:48 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 76
 ERROR - 2020-02-27 15:45:48 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 76
+DEBUG - 2020-02-27 16:28:36 --> Config Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:28:36 --> URI Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Router Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Output Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Security Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Input Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:28:36 --> Language Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:28:36 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:28:36 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:28:36 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:28:36 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:28:36 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:28:36 --> Helper loaded: file_helper
+ERROR - 2020-02-27 16:28:36 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 81
+ERROR - 2020-02-27 16:28:36 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 81
+DEBUG - 2020-02-27 16:39:38 --> Config Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:39:38 --> URI Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Router Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Output Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Security Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Input Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:39:38 --> Language Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:39:38 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:39:38 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:39:39 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:39:39 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:39:39 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:39:39 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:39:39 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:39:39 --> Helper loaded: file_helper
+ERROR - 2020-02-27 16:39:39 --> Severity: Notice  --> Array to string conversion C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 81
+DEBUG - 2020-02-27 16:40:20 --> Config Class Initialized
+DEBUG - 2020-02-27 16:40:20 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:40:21 --> URI Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Router Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Output Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Security Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Input Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:40:21 --> Language Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:40:21 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:40:21 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:40:21 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:40:21 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:40:21 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:40:21 --> Helper loaded: file_helper
+DEBUG - 2020-02-27 16:46:11 --> Config Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:46:11 --> URI Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Router Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Output Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Security Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Input Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:46:11 --> Language Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:46:11 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:46:11 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:46:11 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:46:11 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:46:11 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:46:11 --> Helper loaded: file_helper
+ERROR - 2020-02-27 16:46:11 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 75
+ERROR - 2020-02-27 16:46:11 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 75
+DEBUG - 2020-02-27 16:50:38 --> Config Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:50:38 --> URI Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Router Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Output Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Security Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Input Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:50:38 --> Language Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:50:38 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:50:38 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:50:38 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:50:38 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:50:38 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:50:38 --> Helper loaded: file_helper
+ERROR - 2020-02-27 16:50:38 --> Severity: Notice  --> Undefined variable: vlaue C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 73
+ERROR - 2020-02-27 16:50:38 --> Severity: Notice  --> Undefined variable: vlaue C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 73
+DEBUG - 2020-02-27 16:50:51 --> Config Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:50:51 --> URI Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Router Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Output Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Security Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Input Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:50:51 --> Language Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:50:51 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:50:51 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:50:51 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:50:51 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:50:51 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:50:51 --> Helper loaded: file_helper
+DEBUG - 2020-02-27 16:51:37 --> Config Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:51:37 --> URI Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Router Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Output Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Security Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Input Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:51:37 --> Language Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:51:37 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:51:37 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:51:37 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:51:37 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:51:37 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:51:37 --> Helper loaded: file_helper
+ERROR - 2020-02-27 16:51:37 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 77
+ERROR - 2020-02-27 16:51:37 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 77
+DEBUG - 2020-02-27 16:53:08 --> Config Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:53:08 --> URI Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Router Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Output Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Security Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Input Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:53:08 --> Language Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:53:08 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:53:08 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:53:08 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:53:08 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:53:08 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:53:08 --> Helper loaded: file_helper
+ERROR - 2020-02-27 16:53:08 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 78
+ERROR - 2020-02-27 16:53:08 --> Severity: Notice  --> Undefined index: orderProductOptions C:\xampp\htdocs\api.cway.co.kr\webapp\public_html\application\controllers\api.php 78
+DEBUG - 2020-02-27 16:53:38 --> Config Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Hooks Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 16:53:38 --> URI Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Router Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Output Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Security Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Input Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 16:53:38 --> Language Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Loader Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 16:53:38 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 16:53:38 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 16:53:38 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 16:53:38 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 16:53:38 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Controller Class Initialized
+DEBUG - 2020-02-27 16:53:38 --> Helper loaded: file_helper
+DEBUG - 2020-02-27 17:06:26 --> Config Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Hooks Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Utf8 Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> UTF-8 Support Enabled
+DEBUG - 2020-02-27 17:06:26 --> URI Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Router Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Output Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Security Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Input Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Global POST and COOKIE data sanitized
+DEBUG - 2020-02-27 17:06:26 --> Language Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Loader Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Helper loaded: url_helper
+DEBUG - 2020-02-27 17:06:26 --> Helper loaded: form_helper
+DEBUG - 2020-02-27 17:06:26 --> Helper loaded: common_helper
+DEBUG - 2020-02-27 17:06:26 --> Helper loaded: cookie_helper
+DEBUG - 2020-02-27 17:06:26 --> Helper loaded: security_helper
+DEBUG - 2020-02-27 17:06:26 --> Database Driver Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Controller Class Initialized
+DEBUG - 2020-02-27 17:06:26 --> Helper loaded: file_helper

@@ -40,8 +40,8 @@ class Api extends CT_Controller {
             // UnivCode는 헤더에서 받아오기로 함 2020-02-26 고병수차장 autoload->database.php에서 처리함.
             // json data Receive
             $receiveData = json_decode(file_get_contents('php://input'), true);  // json data name :Order
-            //$UnivCode = $receiveHeader['UnivCode'];  // 글로벌 처리
-            if (!$_POST['UnivCode']) {      
+            $UnivCode = $$_POST['UnivCode'];
+            if (!$UnivCode) {      
                 $message['rCode'] = "0001";
                 $message['error']['errorCode'] = "0001";
                 $message['error']['errorMessage'] = "UnivCode가 Header에 존재하지 않습니다.";
@@ -49,113 +49,72 @@ class Api extends CT_Controller {
                 echo json_encode($message);
                 exit;
             }
-            writeLog("[{$sLogFileId}] UnivCode=" . json_encode($_POST['UnivCode']), $sLogPath, $bLogable);
+            writeLog("[{$sLogFileId}] UnivCode=" . json_encode($UnivCode), $sLogPath, $bLogable);
 
             //array dividing
             // 각 배열의 정의
-            $order = array();                // 1단계기본배열
-            $orderProducts = array();        // 2단계
-            $payments = array();             // 2단계
-            $orderProductOptions = array();  // 3단계
-            $cardPaymentDetail = array();    // 3단계
-            $couponPaymentDetail = array();  // 3단계
+            $order = array();                // 1단계기본배열:단수
+            $orderProducts = array();        // 2단계:복수
+            $payments = array();             // 2단계:단수
+            $orderProductOptions = array();  // 3단계:복수
+            $cardPaymentDetail = array();    // 3단계:복수
+            $couponPaymentDetail = array();  // 3단계:복수
             // 배열처리된 entity들을 모두 스트링으로 만들자.
-            $receiveData['order']['additionalInfo'] = implode("",$receiveData['order']['additionalInfo']);
+            //$receiveData['order']['additionalInfo'] = implode("",$receiveData['order']['additionalInfo']);
             // 순서상 orderProducts/payments/order 배열 먼저 분리(단수임)
             $orderProducts = $receiveData['order']['orderProducts'];
             unset($receiveData['order']['orderProducts']);
             $payments = $receiveData['order']['payments'];
             unset($receiveData['order']['payments']);
             $order = $receiveData;
-            
+
+            // order 배열 model로 던져 DB에 넣자
+            $this->API->insertOrder($order);
             // 순서상 세번째 가장 하위(3차원) 배열 분리(복수 가능성)
             foreach($orderProducts as $key => $value){
+                $orderProductOptions = $value['orderProductOptions'];
+                unset($value['orderProductOptions']);
+                //$value=orderProducts 복수 배열 model로 던져 DB에 넣자(단 널배열 처리방법)
+                $this->API->insertDBorderProduct($value);
+                //$orderProductOptions 애도 던져야 함.
+                $this->API->insertDBorderProductOption($value['orderProductOptions']);
+            }
+            // payments 배열 model로 던져 DB에 넣자
+            $this->API->insertDBpayment($payments);
+            // 순서상 세번째 가장 하위(3차원) 배열 분리(복수 가능성)
+            foreach($payments as $key => $value){
+                $cardPaymentDetail = $value['cardPaymentDetail'];
+                unset($$value['cardPaymentDetail']);
+                //cardPaymentDetail 배열 model로 던져 DB에 넣자(단 널배열 처리방법)
+                $this->API->insertDBcardPaymentdetail($cardPaymentDetail);
                 
-                foreach($value['orderProductOptions'] as $k => $v){
-                    if(is_array($v['additionalInfo']) $v['additionalInfo'] = implode("",$v['additionalInfo']);
-                    $orderProductOptions = $value['orderProductOptions'];
-                    print_r($orderProductOptions);
-                }
-                
-                
-                
             }
-            unset($orderProducts['orderProductOptions']);
-            //print_r($orderProducts);
-            print_r($orderProductOptions);
 
-            //print_r($orderProducts);
-            
-            exit;
+            // 순서상 세번째 가장 하위(3차원) 배열 분리(복수 가능성)
+            foreach($payments as $key => $value){
+                $couponPaymentDetail = $value['couponPaymentDetail'];                
+                unset($$value['couponPaymentDetail']);
+                //couponPaymentDetail 배열 model로 던져 DB에 넣자(단 널배열 처리방법)
+                $this->API->insertDBcouponPaymentdetail($cardPaymentDetail);
+            }
+            writeLog("[{$sLogFileId}] order=" . json_encode(implode( '/', $order )), $sLogPath, $bLogable);
+            writeLog("[{$sLogFileId}] orderProducts=" . json_encode(implode( '/', $orderProducts )), $sLogPath, $bLogable);
+            writeLog("[{$sLogFileId}] orderProductOptions=" . json_encode(implode( '/', $orderProductOptions )), $sLogPath, $bLogable);
+            writeLog("[{$sLogFileId}] payments=" . json_encode(implode( '/', $payments )), $sLogPath, $bLogable);
+            writeLog("[{$sLogFileId}] cardPaymentDetail=" . json_encode(implode( '/', $cardPaymentDetail )), $sLogPath, $bLogable);
+            writeLog("[{$sLogFileId}] couponPaymentDetail=" . json_encode(implode( '/', $couponPaymentDetail )), $sLogPath, $bLogable);
 
-            
-
-           // 1.order 테이블
-            //배열내에 배열이 있을 경우 연속되는 스트링으로 치환
-            
-
-            // 2. orderProduct 테이블
-            $insertDB = "";
-            $insertDB = $this->API->insertDBorderProduct($receiveArray['orderProduct']);
-            if($insertDB !== RES_CODE_SUCCESS) {
-                $message['rCode'] = "0012";
-                $message['errorCode'] = "0012";
-                $message['errorMessage'] = "orderProduct 테이블이 처리되지 않았습니다.";
-                echo json_encode($message);
-                exit;
-            }
-            // 3. orderProductOption 테이블
-            $insertDB = "";
-            $insertDB = $this->API->insertDBorderProductOption($receiveArray['orderProductOption']);
-            if($insertDB !== RES_CODE_SUCCESS) {
-                $message['rCode'] = "0013";
-                $message['errorCode'] = "0013";
-                $message['errorMessage'] = "orderProductOption 테이블이 처리되지 않았습니다.";
-                echo json_encode($message);
-                exit;
-            }
-            
-            // 4. payment 테이블
-            $insertDB = "";
-            $insertDB = $this->API->insertDBpayment($receiveArray['payment']);
-            if($insertDB !== RES_CODE_SUCCESS) {
-                $message['rCode'] = "0014";
-                $message['errorCode'] = "0014";
-                $message['errorMessage'] = "payment 테이블이 처리되지 않았습니다.";
-                echo json_encode($message);
-                exit;
-            }
-    
-            // 5. cardPaymentdetail 테이블
-            $insertDB = "";
-            $insertDB = $this->API->insertDBcardPaymentdetail($receiveArray['cardPaymentdetail']);
-            if($insertDB !== RES_CODE_SUCCESS) {
-                $message['rCode'] = "0015";
-                $message['errorCode'] = "0015";
-                $message['errorMessage'] = "cardPaymentdetail 테이블이 처리되지 않았습니다.";
-                echo json_encode($message);
-                exit;
-            }
-            
-            // 6. couponPaymentdetail 테이블
-            $insertDB = "";
-            $insertDB = $this->API->insertDBcouponPaymentdetail($receiveArray['couponPaymentdetail']);
-            if($insertDB !== RES_CODE_SUCCESS) {
-                $message['rCode'] = "0016";
-                $message['errorCode'] = "0016";
-                $message['errorMessage'] = "couponPaymentdetail 테이블이 처리되지 않았습니다.";
-                echo json_encode($message);
-                exit;
-            }
-            
-            echo json_encode($receiveArray);
-            return;
         } catch (File_exception $e) {
-        
+            $message['rCode'] = "0002";
+            $message['error']['errorCode'] = "0002";
+            $message['error']['errorMessage'] = "정상적으로 처리되지 않았습니다.";
+            writeLog("[{$sLogFileId}] errorCode=" . json_encode($message['error']['errorCode']) . " errorMessage=" . json_encode($message['error']['errorMessage']), $sLogPath, $bLogable);
+            echo json_encode($message);
         }
-        $this->common_lib->writeLog("[{$sLogFileId}] result=" . json_encode($message), $sLogPath, $bLogable);
-        $this->common_lib->writeLog("[{$sLogFileId}] -------------------------------- END --------------------------------", $sLogPath, $bLogable);
-        return $message;
+        writeLog("[{$sLogFileId}] result=" . json_encode($message), $sLogPath, $bLogable);
+        writeLog("[{$sLogFileId}] -------------------------------- END --------------------------------", $sLogPath, $bLogable);
+        echo json_encode($message);
+        return;
     }    
 
     public function ticket_machine_mileage_insert() {	     
