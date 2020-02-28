@@ -38,8 +38,7 @@ class Api_model extends CI_Model {
         return  $this->db->affected_rows();    
     }
 
-    
-    // insertDBorder
+    // insertDBorder Master 
     function insertOrder($order) {
 
 		global $db;
@@ -128,7 +127,18 @@ class Api_model extends CI_Model {
         );
 		$this->db->trans_start();  
         //이부분에 쿼리 넣어 주시면 됩니다.
+		
+		//order insert
 		$this->db->query($sp,$params); 
+		
+		//products insert 여기서 나머지들 호출해서 사용 
+		$this->Api_model->insertDBorderProduct($order['orderProducts']);
+		//options insert 
+		//payment insert 
+		//card insert 
+		//coupon insert 
+
+
 		//이부분에 쿼리 넣어 주시면 됩니다.
 
 	    $this->db->trans_complete();   
@@ -136,10 +146,12 @@ class Api_model extends CI_Model {
 		return $this->db->trans_status()? "0000" : -1;    
 	}
 
+
     /*
 	// insertDBorderProduct
     function insertDBorderProduct($receiveDetailarray) {
         global $db;
+
         foreach($receiveDetailarray as $k => $v) {
             if(isset($v['UnivCode'])) $UnivCode = trim($v['UnivCode']);      // 대학코드            s5
             $createdAt              = trim($v['createdAt']);                 // 등록일              s30
@@ -234,6 +246,7 @@ class Api_model extends CI_Model {
         $this->db->query($sp,$params); 
         return  $this->db->affected_rows();    
     }
+	
     // insertDBorderProductOption
     function insertDBorderProductOption($receiveDetailarray) {
         global $db;
@@ -489,45 +502,5 @@ class Api_model extends CI_Model {
         $this->db->query($sp,$params); 
         return  $this->db->affected_rows();    
     }     */
-
-    // insertOrderTest
-    function insertOrderTest($order) {
-    
-        global $db;  
-        //$CI =& get_instance();
-		//print_r($db);
-		//exit;
-        
-        $univcode               = $order['order']['univcode'];                  // 대학코드*           s5
-        $createdAt              = trim($order['order']['createdAt']);           // 등록일              s30
-        $updatedAt              = trim($order['order']['updatedAt']);           // 수정일              s30
-        $billNo                 = trim($order['order']['billNo']);              // 영수번호*           s30
-        $storeCode              = trim($order['order']['franchiseCd']);         // 지점코드            s30  연동처리
-        $posNo                  = trim($order['order']['posNo']);               // 포스번호*           s5   연동 기기번호
-        $saleDay                = $order['order']['saleDay'];                   // 영업일*             s10  YYYY-MM-DD
-        $salesDaySeq            = $order['order']['salesDaySeq'];               // 영업일자순분        n
-
-        //{$db['default']['database']}.dbo.
-        //$sp = "VENDINGM.dbo.SP_ITMS_ORDER;01 ?, ?, ?, ?, ?, ?, ?, ? ";
-
-        $params = array(
-            'univcode'               => $univcode,
-            'saleDay'                => $saleDay,
-            'storeCode'              => $storeCode,
-            'posNo'                  => $posNo,
-            'billNo'                 => $billNo,
-            'createdAt'              => $createdAt,
-            'updatedAt'              => $updatedAt,
-            'salesDaySeq'            => $salesDaySeq,
-        );
-		//$this->db->trans_start();  
-        //이부분에 쿼리 넣어 주시면 됩니다.
-		//$this->db->query($sp,$params); 
-		//이부분에 쿼리 넣어 주시면 됩니다.
-
-	    //$this->db->trans_complete();   
-		
-		return $this->db->trans_status()? "0000" : -1;
-    }
 
 }

@@ -77,10 +77,10 @@ if(isset($receiveHeader['univcode'])){
 }
 
 if(!isset($_POST['Univcode'])) {
-    $json_env_array['status'] = -10;    
-    $json_env_array['message'] = "대학교코드가 존재하지 않습니다.";
-    echo json_encode($json_env_array);      
-    exit;  
+   $json_env_array['status'] = -10;    
+   $json_env_array['message'] = "대학교코드가 존재하지 않습니다.";
+   echo json_encode($json_env_array);      
+   exit;  
 }
 
 $DB_CONNECTION = array(
@@ -99,10 +99,10 @@ $DB_CONNECTION = array(
 );
 
 if(! array_key_exists ($_POST['Univcode'] , $DB_CONNECTION) ){
-    $json_env_array['status'] = -1;    
-    $json_env_array['message'] = "존재하지 않는 대학교코드입니다.";
-    echo json_encode($json_env_array);      
-    exit;
+   $json_env_array['status'] = -1;    
+   $json_env_array['message'] = "존재하지 않는 대학교코드입니다.";
+   echo json_encode($json_env_array);      
+   exit;
 }
 
 
