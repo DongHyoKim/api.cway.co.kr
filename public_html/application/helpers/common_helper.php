@@ -106,7 +106,7 @@ function log_auto_file_delete($dir)
     }
 }
 
-function array_param($arr,$arrtype) {
+function arrange_param($arr,$arrtype) {
 
     // 공통으로 사용되는 entity들을 변수에 담자
 	// 아래는 order의 키

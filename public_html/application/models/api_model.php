@@ -143,9 +143,38 @@ class Api_model extends CI_Model {
 
 	    $this->db->trans_complete();   
 		
-		return $this->db->trans_status()? "0000" : -1;    
+		return $this->db->trans_status()? "0000" : -1;
 	}
 
+    // insertDB
+    function insertDB($param,$param_type) {
+
+		global $db;
+
+		$sp_arr = array(
+			'order'     => "VENDINGM.dbo.SP_ORDERTEST;01 ",
+			'products'  => "VENDINGM.dbo.SP_PRODUCTTEST;01 ",
+			'options'   => "VENDINGM.dbo.SP_POPTIONTEST;01 ",
+			//'payments' => '',
+			//'card' => '',
+			//'coupon' => '',
+		);
+
+		for ($i = 0;$i <= count($param);$i++) {
+            $questionmark .= "? ";
+		}
+        $questionmark .= '"';
+        $sp = $sp_arr[$param_type].$questionmark;
+
+		// transaction start
+		$this->db->trans_start();
+		// insert DataBase
+		$this->db->query($sp,$params);
+        // transaction end
+		$this->db->trans_complete();
+
+		return $this->db->trans_status()? "0000" : -1;
+    }
 
     /*
 	// insertDBorderProduct
