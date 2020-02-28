@@ -146,7 +146,8 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 	 */
 	function _execute($sql)
 	{
-		$sql = $this->_prep_query($sql);
+        $sql = $this->_prep_query($sql);
+        
 		return sqlsrv_query($this->conn_id, $sql, null, array(
 			'Scrollable'				=> SQLSRV_CURSOR_STATIC,
 			'SendStreamParamsAtExec'	=> true

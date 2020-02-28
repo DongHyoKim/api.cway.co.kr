@@ -2,7 +2,7 @@
 class Api_model extends CI_Model {
 
     public function __construct(){
-		parent::__construct();
+        parent::__construct();        
     }
 
     //전체 마일리지 조회
@@ -38,63 +38,67 @@ class Api_model extends CI_Model {
         return  $this->db->affected_rows();    
     }
 
+    
     // insertDBorder
     function insertOrder($order) {
-        global $db; //************************************************************************************************** */
-        $UnivCode = trim($v['UnivCode']);      // 대학코드*           s5
-        $createdAt              = trim($v['createdAt']);                 // 등록일              s30
-        $updatedAt              = trim($v['updatedAt']);                 // 수정일              s30
-        $billNo                 = trim($v['billNo']);                    // 영수번호*           s30
-        $headOfficeId           = trim($v['headOfficeId']);              // 본사id              s30
-        if(isset($v['franchiseId'])) $franchiseId = trim($v['franchiseId']); // 가맹점id            s30
-        $franchiseCd            = trim($v['franchiseCd']);               // 지점코드            s30  연동처리
-        $deviceId               = trim($v['deviceId']);                  // 기기id              s30 
-        $deviceSeq              = $v['deviceSeq'];                       // 기기번호            n
-        if(isset($v['posNo'])) $posNo = trim($v['posNo']);               // 포스번호*           s5   연동 기기번호
-        $channelType            = trim($v['channelType']);               // 채널구분            s10  ch01:kiosk
-        $saleDay                = $v['saleDay'];                         // 영업일*             s10  YYYY-MM-DD
-        if(isset($v['outerBillno'])) $outerBillno = trim($v['outerBillno']); // 외부연동영수번호    s30
-        $tradeType              = trim($v['tradeType']);                 // 거래구분            s2   S:매출 C:취소
-        $serviceType            = trim($v['serviceType']);               // 매장/포장           s2   S:매장 P:포장
-        if(isset($v['salesTarget'])) $salesTarget = trim($v['salesTarget']); // 서비스대상          s2   G:일반 S:직원
-        $totalAmount            = $v['totalAmount'];                     // 총주문금액          n
-        $paymentAmount          = $v['paymentAmount'];                   // 결재금액            n
-        $discountAmount         = $v['discountAmount'];                  // 총할인금액          n
-        $couponAmount           = $v['couponAmount'];                    // 쿠폰금액            n
-        $cashableAmount         = $v['cashableAmount'];                  // 현금화금액          n
-        $taxationAmount         = $v['taxationAmount'];                  // 과세대상금액        n
-        $dutyAmount             = $v['dutyAmount'];                      // 면세금액            n
-        $totalTax               = $v['totalTax'];                        // 부가세액            n
-        if(isset($v['tableNo'])) $tableNo = trim($v['tableNo']);         // 테이블번호          s3
-        if(isset($v['orgBillNo'])) $orgBillNo = trim($v['orgBillNo']);   // 원거래영수번호      s30  반품건원거래번호
-        $orderStatus            = trim($v['orderStatus']);               // 주문상태            s5   1001주문중 9999주문취소 1000픽업주문취소 1003주문접수 1005주문확인 2007상품준비중 2009픽업대기 2020픽업완료 2085픽업지연 2090픽업지연완료 2099픽업미완료
-        $paymentStatus          = trim($v['paymentStatus']);             // 결재상태            s2   S성공 F실패(부분) F결재시 부분실패
-        if(isset($v['cancelBillNo'])) $cancelBillNo = trim($v['cancelBillNo']); // 취소영수번호        s30  원거래건의취소영수번호
-        if(isset($v['receiptPrintCountType'])) $receiptPrintCountType = trim($v['receiptPrintCountType']); // 영수증출력갯수타입  s20
-        if(isset($v['exchangePrintCountType'])) $exchangePrintCountType = trim($v['exchangePrintCountType']); // 교환건출력갯수타입  s20
-        if(isset($v['additionalInfo'])) $additionalInfo = trim($v['additionalInfo']); // 부가정보            json
-        if(isset($v['filler1'])) $filler1 = trim($v['filler1']);         // 비고1               s500
-        if(isset($v['filler2'])) $filler2 = trim($v['filler2']);         // 비고2               s500
-        if(isset($v['filler3'])) $filler3 = trim($v['filler3']);         // 비고3               s500
-        if(isset($v['filler4'])) $filler4 = trim($v['filler4']);         // 비고4               s500
-        if(isset($v['closeYn'])) $closeYn = trim($v['closeYn']);         // 마감처리여부        s255
-        if(isset($v['closeDate'])) $closeDate = trim($v['closeDate']);   // 마감일자            s255
-        if(isset($v['salesDaySeq'])) $salesDaySeq = $v['salesDaySeq'];   // 영업일자순분        n
-        }
-        $sp = "VENDINGM.dbo.SP_ITMS_ORDER;01 ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ";
+
+		global $db;
+
+        $univcode               = $order['univcode'];                        // 대학코드*           s5
+        $createdAt              = trim($order['createdAt']);                 // 등록일              s30
+        $updatedAt              = trim($order['updatedAt']);                 // 수정일              s30
+        $billNo                 = trim($order['billNo']);                    // 영수번호*           s30
+        $headOfficeId           = trim($order['headOfficeId']);              // 본사id              s30
+        $franchiseId            = trim($order['franchiseId']);               // 가맹점id            s30
+        $storeCode              = trim($order['franchiseCd']);               // 지점코드            s30  연동처리
+        $deviceId               = trim($order['deviceId']);                  // 기기id              s30 
+        $deviceSeq              = $order['deviceSeq'];                       // 기기번호            n
+        $posNo                  = trim($order['posNo']);                     // 포스번호*           s5   연동 기기번호
+        $channelType            = trim($order['channelType']);               // 채널구분            s10  ch01:kiosk
+        $saleDay                = $order['saleDay'];                         // 영업일*             s10  YYYY-MM-DD
+        $outerBillno            = trim($order['outerBillno']);               // 외부연동영수번호    s30
+        $tradeType              = trim($order['tradeType']);                 // 거래구분            s2   S:매출 C:취소
+        $serviceType            = trim($order['serviceType']);               // 매장/포장           s2   S:매장 P:포장
+        $salesTarget            = trim($order['salesTarget']);               // 서비스대상          s2   G:일반 S:직원
+        $totalAmount            = $order['totalAmount'];                     // 총주문금액          n
+        $paymentAmount          = $order['paymentAmount'];                   // 결재금액            n
+        $discountAmount         = $order['discountAmount'];                  // 총할인금액          n
+        $couponAmount           = $order['couponAmount'];                    // 쿠폰금액            n
+        $cashableAmount         = $order['cashableAmount'];                  // 현금화금액          n
+        $taxationAmount         = $order['taxationAmount'];                  // 과세대상금액        n
+        $dutyAmount             = $order['dutyAmount'];                      // 면세금액            n
+        $totalTax               = $order['totalTax'];                        // 부가세액            n
+        $tableNo                = trim($order['tableNo']);                   // 테이블번호          s3
+        $orgBillNo              = trim($order['orgBillNo']);                 // 원거래영수번호      s30  반품건원거래번호
+        $orderStatus            = trim($order['orderStatus']);               // 주문상태            s5   1001주문중 9999주문취소 1000픽업주문취소 1003주문접수 1005주문확인 2007상품준비중 2009픽업대기 2020픽업완료 2085픽업지연 2090픽업지연완료 2099픽업미완료
+        $paymentStatus          = trim($order['paymentStatus']);             // 결재상태            s2   S성공 F실패(부분) F결재시 부분실패
+        $cancelBillNo           = trim($order['cancelBillNo']);              // 취소영수번호        s30  원거래건의취소영수번호
+        $receiptPrintCountType  = trim($order['receiptPrintCountType']);     // 영수증출력갯수타입  s20
+        $exchangePrintCountType = trim($order['exchangePrintCountType']);    // 교환건출력갯수타입  s20
+        $additionalInfo         = trim($order['additionalInfo']);            // 부가정보            json
+        $filler1                = trim($order['filler1']);                   // 비고1               s500
+        $filler2                = trim($order['filler2']);                   // 비고2               s500
+        $filler3                = trim($order['filler3']);                   // 비고3               s500
+        $filler4                = trim($order['filler4']);                   // 비고4               s500
+        $closeYn                = trim($order['closeYn']);                   // 마감처리여부        s255
+        $closeDate              = trim($order['closeDate']);                 // 마감일자            s255
+        $salesDaySeq            = $order['salesDaySeq'];                     // 영업일자순분        n
+
+        $sp = "VENDINGM.dbo.SP_ITMS_ORDER;01 ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ";
+
         $params = array(
-            'UnivCode'               => $UnivCode,
-            'createdAt'              => $createdAt,
-            'updatedAt'              => $updatedAt,
+            'univcode'               => $univcode,
+            'saleDay'                => $saleDay,
+            'storeCode'              => $storeCode,
+            'posNo'                  => $posNo,
             'billNo'                 => $billNo,
+    		'createdAt'              => $createdAt,
+            'updatedAt'              => $updatedAt,
             'headOfficeId'           => $headOfficeId,
             'franchiseId'            => $franchiseId,
-            'franchiseCd'            => $franchiseCd,
             'deviceId'               => $deviceId,
             'deviceSeq'              => $deviceSeq,
-            'posNo'                  => $posNo,
             'channelType'            => $channelType,
-            'saleDay'                => $saleDay,
             'outerBillno'            => $outerBillno,
             'tradeType'              => $tradeType,
             'serviceType'            => $serviceType,
@@ -114,8 +118,6 @@ class Api_model extends CI_Model {
             'cancelBillNo'           => $cancelBillNo,
             'receiptPrintCountType'  => $receiptPrintCountType,
             'exchangePrintCountType' => $exchangePrintCountType,
-            'additionalInfo'         => $additionalInfo,
-            'additionalInfo'         => $additionalInfo,
             'filler1'                => $filler1,
             'filler2'                => $filler2,
             'filler3'                => $filler3,
@@ -124,11 +126,18 @@ class Api_model extends CI_Model {
             'closeDate'              => $closeDate,
             'salesDaySeq'            => $salesDaySeq,
         );
-        $this->db->query($sp,$params); 
-        return  $this->db->affected_rows();    
-    }
+		$this->db->trans_start();  
+        //이부분에 쿼리 넣어 주시면 됩니다.
+		$this->db->query($sp,$params); 
+		//이부분에 쿼리 넣어 주시면 됩니다.
 
-    // insertDBorderProduct
+	    $this->db->trans_complete();   
+		
+		return $this->db->trans_status()? "0000" : -1;    
+	}
+
+    /*
+	// insertDBorderProduct
     function insertDBorderProduct($receiveDetailarray) {
         global $db;
         foreach($receiveDetailarray as $k => $v) {
@@ -479,6 +488,46 @@ class Api_model extends CI_Model {
         );
         $this->db->query($sp,$params); 
         return  $this->db->affected_rows();    
+    }     */
+
+    // insertOrderTest
+    function insertOrderTest($order) {
+    
+        global $db;  
+        //$CI =& get_instance();
+		//print_r($db);
+		//exit;
+        
+        $univcode               = $order['order']['univcode'];                  // 대학코드*           s5
+        $createdAt              = trim($order['order']['createdAt']);           // 등록일              s30
+        $updatedAt              = trim($order['order']['updatedAt']);           // 수정일              s30
+        $billNo                 = trim($order['order']['billNo']);              // 영수번호*           s30
+        $storeCode              = trim($order['order']['franchiseCd']);         // 지점코드            s30  연동처리
+        $posNo                  = trim($order['order']['posNo']);               // 포스번호*           s5   연동 기기번호
+        $saleDay                = $order['order']['saleDay'];                   // 영업일*             s10  YYYY-MM-DD
+        $salesDaySeq            = $order['order']['salesDaySeq'];               // 영업일자순분        n
+
+        //{$db['default']['database']}.dbo.
+        //$sp = "VENDINGM.dbo.SP_ITMS_ORDER;01 ?, ?, ?, ?, ?, ?, ?, ? ";
+
+        $params = array(
+            'univcode'               => $univcode,
+            'saleDay'                => $saleDay,
+            'storeCode'              => $storeCode,
+            'posNo'                  => $posNo,
+            'billNo'                 => $billNo,
+            'createdAt'              => $createdAt,
+            'updatedAt'              => $updatedAt,
+            'salesDaySeq'            => $salesDaySeq,
+        );
+		//$this->db->trans_start();  
+        //이부분에 쿼리 넣어 주시면 됩니다.
+		//$this->db->query($sp,$params); 
+		//이부분에 쿼리 넣어 주시면 됩니다.
+
+	    //$this->db->trans_complete();   
+		
+		return $this->db->trans_status()? "0000" : -1;
     }
 
 }

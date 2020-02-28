@@ -70,14 +70,14 @@ $db['default']['stricton'] = FALSE;
 
 $json_env_array = array();
 
+// $_POST['Univcode']와 $receiveHeader['univcode']
 $receiveHeader = apache_request_headers();
-if(isset($receiveHeader['UnivCode'])){
-    $_POST['UnivCode'] = $receiveHeader['UnivCode'];
+if(isset($receiveHeader['univcode'])){
+    $_POST['Univcode'] = $receiveHeader['univcode'];
 }
 
-
-if(!isset($_POST['UnivCode'])) {
-    $json_env_array['status'] = -1;    
+if(!isset($_POST['Univcode'])) {
+    $json_env_array['status'] = -10;    
     $json_env_array['message'] = "대학교코드가 존재하지 않습니다.";
     echo json_encode($json_env_array);      
     exit;  
@@ -95,20 +95,21 @@ $DB_CONNECTION = array(
   , "00123"=> array("hostname"=>"168.188.72.211,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00123001") //ChungNam
   , "00120"=> array("hostname"=>"210.115.160.44,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00120001") //ChungBuk
   , "00112"=> array("hostname"=>"203.253.68.97,8433",  "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00112001") //Hufs
+  , "00100"=> array("hostname"=>"0010001.CWAY.KR,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"VENDINGM")    //CwayTest
 );
 
-
-if(! array_key_exists ($_POST['UnivCode'] , $DB_CONNECTION) ){
+if(! array_key_exists ($_POST['Univcode'] , $DB_CONNECTION) ){
     $json_env_array['status'] = -1;    
-    $json_env_array['message'] = "존재하지 않는 대학코드입니다.";
+    $json_env_array['message'] = "존재하지 않는 대학교코드입니다.";
     echo json_encode($json_env_array);      
     exit;
 }
 
-$db['default']['hostname'] = $DB_CONNECTION[$_POST['UnivCode']]['hostname'];
-$db['default']['username'] = $DB_CONNECTION[$_POST['UnivCode']]['username'];
-$db['default']['password'] = $DB_CONNECTION[$_POST['UnivCode']]['password'];
-$db['default']['database'] = $DB_CONNECTION[$_POST['UnivCode']]['database'];
+
+$db['default']['hostname'] = $DB_CONNECTION[$_POST['Univcode']]['hostname'];
+$db['default']['username'] = $DB_CONNECTION[$_POST['Univcode']]['username'];
+$db['default']['password'] = $DB_CONNECTION[$_POST['Univcode']]['password'];
+$db['default']['database'] = $DB_CONNECTION[$_POST['Univcode']]['database'];
 $db['default']['dbdriver'] = 'sqlsrv';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = FALSE;
