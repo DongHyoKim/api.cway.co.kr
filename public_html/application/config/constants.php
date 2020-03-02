@@ -39,6 +39,13 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('LOG_FILE_AUTO_DELETE_DATE', 30); // 지난 로그 삭제할 일자 (30일후 로그 삭제)
 define('RES_CODE_SUCCESS','0000');
 
+// COUNT OF ENTITY ARRAY
+define('COUNT_OF_ORDER','38');
+define('COUNT_OF_PRODUCTS','42');
+define('COUNT_OF_OPTIONS','33');
+define('COUNT_OF_PAYMENTS','41');
+define('COUNT_OF_CARD','19');
+define('COUNT_OF_COUPON','19');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

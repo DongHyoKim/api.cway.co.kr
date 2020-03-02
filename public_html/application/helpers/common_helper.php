@@ -118,13 +118,11 @@ function arrange_param($arr,$arrtype) {
     // 재사용되는 entity
     $createdAt              = trim($arr['createdAt']);                 // 등록일              s30
     $updatedAt              = trim($arr['updatedAt']);                 // 수정일              s30
+    $headOfficeId           = trim($arr['headOfficeId'];               // 본사id              s30
+    $franchiseId            = trim($arr['franchiseId']);               // 가맹점id            s30
+    $deviceId               = trim($arr['deviceId']);                  // 기기id              s30 
 	
-	if ($arraytype == "options") {
-
-        // 테스트후 나머지들이 들어올 곳
-		//$orderProductOptionSeq  = $arr['orderProductOptionSeq'];       // 주문옵션순번        n
-		//$orderProductSeq        = $arr['orderProductSeq'];             // 주문상품순번        n
-		//$optionName             = trim($arr['optionName']);            // 옵션명             s255
+	if ($arrtype == "options") {
 
         $params = array(
             'univcode'               => $univcode,           // Options key  대학코드*          s5
@@ -132,17 +130,39 @@ function arrange_param($arr,$arrtype) {
             'storeCode'              => $storeCode,          // Options key  지점코드            s30  연동처리 ********명칭변경 주의
             'posNo'                  => $posNo,              // Options key  포스번호*           s5   연동 기기번호
             'billNo'                 => $billNo,             // Options key  영수번호*           s30
-			'orderProductOptionSeq'  => $arr['orderProductOptionSeq'],// Options key  주문옵션순번 n
-			'orderProductSeq'        => $arr['orderProductSeq'],//           주문상품순번         n
-			'optionName'             => trim($arr['optionName']),//          옵션명             s255
-    		'createdAt'              => $createdAt,          //            등록일             s30
-            'updatedAt'              => $updatedAt,          //            수정일             s30
+            'orderProductOptionSeq'  => $arr['orderProductOptionSeq'],// Options key  주문옵션순번* n
+            'createdAt'              => $createdAt,          //              등록일              s30
+            'updatedAt'              => $updatedAt,          //              수정일              s30
+            'headOfficeId'           => $headOfficeId,       //              본사id              s30
+            'franchiseId'            => $franchiseId,        //              가맹점id            s30
+            'deviceId'               => $deviceId,           //              기기id              s30
+            'orderProductSeq'        => $arr['orderProductSeq'], //          주문상품순번         n
+            'optionGroupId'          => trim($arr['optionGroupId']), //      옵션그룹아이디       s255
+            'OptionGroupExtrCd'      => trim($arr['OptionGroupExtrCd']), //  옵션그룹외부연동코드  s20
+            'OptionGroupName'        => trim($arr['OptionGroupName']), //    옵션그룹명           s255
+            'optionGroupMgrName'     => trim($arr['optionGroupMgrName']), // 옵션그룹관리명       s255
+            'optionId'               => trim($arr['optionId']), //           옵션아이디           s255
+            'optionName'             => trim($arr['optionName']), //         옵션명               s255
+            'productMgrName'         => trim($arr['productMgrName']), //     옵션관리명           s255
+            'optionPrintName'        => trim($arr['optionPrintName']), //    옵션명출력명         s255
+            'extrCd'                 => trim($arr['extrCd']), //             외부연결코드1        s20
+            'extr2Cd'                => trim($arr['extr2Cd']), //            외부연결코드2        s20
+            'extr3Cd'                => trim($arr['extr3Cd']), //            외부연결코드3        s20
+            'price'                  => $arr['price'],       //              단가                n
+            'primeCost'              => $arr['primeCost'],   //              원가                n
+            'taxAmount'              => $arr['taxAmount'],   //              부가세               n
+            'useTax'                 => $arr['useTax'],      //              과세여부             s1 1:과세 0:면세
+            'baseSaleQty'            => $arr['baseSaleQty'], //              기분수량             n
+            'productQty'             => $arr['productQty'],  //              주문수량             n
+            'amount'                 => $arr['amount'],      //              주문금액             n
+            //'additionalInfo '        => trim($arr['additionalInfo ']), //    부가정보 JSON 사용안함
+            'filler1'                => trim($arr['filler1']), //            비고1                s500
+            'filler2'                => trim($arr['filler2']), //            비고2                s500
+            'filler3'                => trim($arr['filler3']), //            비고3                s500
+            'filler4'                => trim($arr['filler4']), //            비고4                s500
 		);
 
     } else if ($arrtype == "products") {
-
-        // 테스트후 나머지들이 들어올 곳
-        //$orderProductSeq        = $arr['orderProductSeq'];                 // 주문상품순번        n
 
         $params = array(
             'univcode'               => $univcode,           // order key  대학코드*          s5
@@ -150,10 +170,141 @@ function arrange_param($arr,$arrtype) {
             'storeCode'              => $storeCode,          // order key  지점코드            s30  연동처리 ********명칭변경 주의
             'posNo'                  => $posNo,              // order key  포스번호*           s5   연동 기기번호
             'billNo'                 => $billNo,             // order key  영수번호*           s30
-			'orderProductSeq'        => $$arr['orderProductSeq'],// order key 주문상품순번       n
+			'orderProductSeq'        => $$arr['orderProductSeq'],// order key 주문상품순번*    n
     		'createdAt'              => $createdAt,          //            등록일             s30
             'updatedAt'              => $updatedAt,          //            수정일             s30
+            'channelType'            => trim($arr['channelType']), //      채널구분           s10  ch01:kiosk
+            'headOfficeId'           => $headOfficeId,       //            본사id             s30
+            'franchiseId'            =  $franchiseId,        //            가맹점id            s30
+            'deviceId'               => $deviceId,           //            기기id              s30 
+            'tradeType'              => trim($arr['tradeType']), //        거래구분            s2   S:매출 C:취소
+            'orderProductType'       => trim($arr['orderProductType ']), //주문상품구분        s255 P:영수(payment) C:쿠폰(coupon) F:사은품(free)
+            'salesTarget'            => trim($arr['salesTarget']), //      서비스대상          s255 G:일반 S:직원
+            'serviceType'            => trim($arr['serviceType']), //      매장/포장           s255 S:매장 P:포장
+            'mediaNo'                => trim($arr['mediaNo']), //          미디어번호          s255 쿠폰일경우 쿠폰번호
+            'categoryId'             => trim($arr['categoryId']), //       카테고리아이디       s255
+            'categoryName'           => trim($arr['categoryName']), //     카테고리아이디       s255
+            'categoryMgrName'        => trim($arr['categoryMgrName']), //  카테고리관리명       s255
+            'categoryExtrCd'         => trim($arr['categoryExtrCd']), //   카테고리외부연동코드  s20
+            'productId'              => trim($arr['productId']), //        상품아이디           s255
+            'productName'            => trim($arr['productName']), //      상품명               s255
+            'productMgrName'         => trim($arr['productMgrName']), //   상품관리명           s255
+            'extrCd'                 => trim($arr['extrCd']), //           상품외부연동코드      s20
+            'extr2Cd'                => trim($arr['extr2Cd']), //          상품외부연동코드2     s20
+            'extr3Cd'                => trim($arr['extr3Cd']), //          상품외부연동코드3     s20
+            'primeCost'              => $arr['primeCost'],     //          상품원가              n
+            'price'                  => $arr['price'],         //          상품단가              n
+            'taxAmount'              => $arr['taxAmount'],     //          부가세                n
+            'useTax'                 => $arr['useTax'],        //          과세상품여부           b
+            'baseSaleQty'            => $arr['baseSaleQty'],   //          기본수량              n
+            'productQty'             => $arr['productQty'],    //          주문상품수량           n
+            'amount'                 => $arr['amount'],        //          합계금액              n
+            'orgBillNo'              => trim($arr['orgBillNo']), //        원거래영수번호        s255
+            'itrPrinterAlias'        => trim($arr['itrPrinterAlias']), //  내부프린트정보        o
+            'etrPrinterAlias'        => trim($arr['etrPrinterAlias']), //  외부프린트정보        o
+            'productPrintName'       => trim($arr['productPrintName']), // 주방출력상품명        s255 있을때만 출력
+            'outputQty'              => $arr['outputQty'],     //          티켓출력수량          n
+            'salesDaySeq'            => $arr['salesDaySeq'],   //          영업일자순번          n
+            //'additionalInfo'         => $arr['additionalInfo'], //         부가정보              JSON형식 사용안함
+            'filler1'                => trim($arr['filler1']), //          비고1                s500
+            'filler2'                => trim($arr['filler2']), //          비고2                s500
+            'filler3'                => trim($arr['filler3']), //          비고3                s500
+            'filler4'                => trim($arr['filler4']), //          비고4                s500
         );
+
+    } else if ($arrtype == "card") {
+
+        $params = array(
+            'univcode'               => $univcode,           // card key  대학코드*            s5
+            'saleDay'                => $saleDay,            // card key  영업일*              s10  YYYY-MM-DD
+            'storeCode'              => $storeCode,          // card key  지점코드             s30  연동처리 ********명칭변경 주의
+            'posNo'                  => $posNo,              // card key  포스번호*            s5   연동 기기번호
+            'billNo'                 => $billNo,             // card key  영수번호*            s30
+            'paymentSeq'             => $arr['paymentSeq'],  // card key  결재순번*            n
+    		'createdAt'              => $createdAt,          //            등록일              s30
+            'updatedAt'              => $updatedAt,          //            수정일              s30
+            'vanCd'                  => trim($arr['vanCd']), //            밴코드              s255
+            'issueCd'                => trim($arr['issueCd']), //          발급사코드          s255
+            'issueName'              => trim($arr['issueName']), //        발급사명            s255
+            'acquirerCd'             => trim($arr['acquirerCd']), //       매입사코드          s255            
+            'acquirerName'           => trim($arr['acquirerName']), //     매입사명            s255
+            'storeNo'                => trim($arr['storeNo']), //          가맹점번호          s255
+            'installment'            => trim($arr['installment']), //      할부개월            s255
+            'cardNo'                 => trim($arr['cardNo']), //           카드번호            s255
+            //'additionalInfo'         => trim($arr['additionalInfo']) //    부가정보            JSON 사용안함
+            'filler1'                => trim($arr['filler1']), //          비고1               s500
+            'filler2'                => trim($arr['filler2']), //          비고2               s500
+            'filler3'                => trim($arr['filler3']), //          비고3               s500
+        );
+    } else if ($arrtype == "coupon") {
+        
+        $params = array(
+            'univcode'               => $univcode,           // coupon key  대학코드*          s5
+            'saleDay'                => $saleDay,            // coupon key  영업일*            s10  YYYY-MM-DD
+            'storeCode'              => $storeCode,          // coupon key  지점코드           s30  연동처리 ********명칭변경 주의
+            'posNo'                  => $posNo,              // coupon key  포스번호*          s5   연동 기기번호
+            'billNo'                 => $billNo,             // coupon key  영수번호*          s30
+            'paymentSeq'             => $arr['paymentSeq'],  // coupon key  결재순번*          n
+    		'createdAt'              => $createdAt,          //            등록일              s30
+            'updatedAt'              => $updatedAt,          //            수정일              s30
+            'affiliateCd'            => trim($arr['affiliateCd']), //      제휴사코드          s255 OMNITEL:옵니텔 PAYCO:페이코 ZLGOON:즐거운 PAYS:페이즈 OKCASHBAG:오케이캐쉬백 TOUCHING:터칭포인트
+            'couponType'             => trim($arr['couponType']), //       쿠폰구분            s255 EXCHANGE:교환권 AMOUNT:금액권 POINT:포인트(SK,OKCASHBAK,단골,터칭)
+            'couponExplanation'      => trim($arr['couponExplanation']), //쿠폰설명            s255
+            'mediaNo'                => trim($arr['mediaNo']), //          인증코드            s255
+            'usePoint'               => $arr['usePoint'],    //            사용포인트           n
+            'occurPoint'             => $arr['occurPoint'],  //            발생포인트           n
+            'remainPoint'            => $arr['remainPoint'], //            남은포인트           n
+            'availablePoint'         => $arr['availablePoint'], //         유효포인트           n
+            'additionalInfo'         => trim($arr['additionalInfo']), //   부가정보             JSON 사용안함
+            'filler1'                => trim($arr['filler1']), //          비고1               s500
+            'filler2'                => trim($arr['filler2']), //          비고2               s500
+            'filler3'                => trim($arr['filler3']), //          비고3               s500
+        );
+    } else if ($arrtype == "payments") {
+
+        $params = array(
+            'univcode'               => $univcode,           // payments key  대학코드*          s5
+            'saleDay'                => $saleDay,            // payments key  영업일*            s10  YYYY-MM-DD
+            'storeCode'              => $storeCode,          // payments key  지점코드            s30  연동처리 ********명칭변경 주의
+            'posNo'                  => $posNo,              // payments key  포스번호*           s5   연동 기기번호
+            'billNo'                 => $billNo,             // payments key  영수번호*           s30
+            'paymentSeq'             => $arr['paymentSeq'],  // payments key  결재순번*           n
+            'orgRegiDateTime'        => trim($arr['orgRegiDateTime']), //     원거래등록일        s30
+            'createdAt'              => $createdAt,          //               등록일             s30
+            'updatedAt'              => $updatedAt,          //               수정일             s30
+            'headOfficeId'           => $headOfficeId,       //               본사id             s30
+            'franchiseId'            => $franchiseId,        //               가맹점id           s30
+            'deviceId'               => $deviceId,           //               기기id             s30 
+            'channelType'            => trim($arr['channelType']), //         채널구분           s255 ch01:kiosk
+            'paymentPlatform'        => trim($arr['paymentPlatform']), //     결재플랫폼          s255 결재플랫폼 KIOSK, PAY:간편결재
+            'paymentMethod'          => trim($arr['paymentMethod']), //       결재방법            s255 CASH:현금 CASH_RECEIPT:현금영수증 CARD:카드 COUPON:쿠폰 POINT-USE:사용포인트 POINT-SAVE:적립포인트 PAYCO:페이코 KAKAOPAY:카카오페이
+            'tradeType'              => trim($arr['tradeType']), //           거래타입            s255
+            'moduleId'               => trim($arr['moduleId']), //            모듈아이디          s255
+            'paymentAmount'          => $arr['paymentAmount'], //             결재금액            n
+            'dutyAmount'             => $arr['dutyAmount'],  //               면세금액            n
+            'supplyAmount'           => $arr['supplyAmount'], //              공급가액            n
+            'taxAmount'              => $arr['taxAmount'],   //               부가세              n
+            'mediaType'              => trim($arr['mediaType']), //           현금영수증매체타입   s255 INDIVIDUAL:개인 CORPORATION:법인
+            'mediaNo'                => trim($arr['mediaNo']), //             현금영수증매체번호   s255 (주민번호,핸드폰번호,사업자번호,카드번호)
+            'appNo'                  => trim($arr['appNo']), //               승인번호            s255
+            'appDate'                => trim($arr['appDate']), //             승인일자            s255
+            'orgPaymentSeq'          => $arr['orgPaymentSeq'], //             원거래결재순번       n
+            'orgAppNo'               => trim($arr['orgAppNo']), //            원거래승인번호       s255
+            'orgAppDate'             => trim($arr['orgAppDate']), //          원거래승인일자       s255
+            'orgBillNo'              => trim($arr['orgBillNo']), //           원거래영수번호       s255
+            //'approvalInfo'           => trim($arr['approvalInfo']), //        승인정보             o 사용안함
+            'paymentStatus'          => trim($arr['paymentStatus']), //       결재상태             s255 S:성공 F:실패
+            'salesDaySeq'            => $arr['salesDaySeq'], //               영업일자순번          n
+            'cashableAmount'         => $arr['cashableAmount'], //            현금영수증가용금액    n
+            'cashInSeq'              => $arr['cashInSeq'],   //               현금투입금순번        n
+            'cashOutSeq'             => $arr['cashOutSeq'],  //               현금방출금순번        n
+            'closeYn'                => trim($arr['closeYn']), //             마감여부              s255
+            'closeDate'              => trim($arr['closeDate']), //           마감일시              s255
+            'errorMessage'           => trim($arr['errorMessage']), //        에러메시지            t
+            'filler1'                => trim($arr['filler1']),      //      비고1               s500
+            'filler2'                => trim($arr['filler2']),      //      비고2               s500
+            'filler3'                => trim($arr['filler3']),      //      비고3               s500
+            'filler4'                => trim($arr['filler4']),      //      비고4               s500
 
 	} else if ($arrtype == "order") {
 
@@ -165,37 +316,38 @@ function arrange_param($arr,$arrtype) {
             'billNo'                 => $billNo,             // order key  영수번호*           s30
     		'createdAt'              => $createdAt,          //            등록일             s30
             'updatedAt'              => $updatedAt,          //            수정일             s30
-            ///'headOfficeId'           => trim($arr['headOfficeId'],  //            본사id             s30
-            ///'franchiseId'            => trim($arr['franchiseId']),  //            가맹점id           s30
-            ///'deviceId'               => trim($arr['deviceId']),     //            기기id             s30 
-            ///'deviceSeq'              => $arr['deviceSeq'],   //            기기번호            n
-            ///'channelType'            => trim($arr['channelType']),  //            채널구분            s10  ch01:kiosk
-            ///'outerBillno'            => trim($arr['outerBillno']),  //     외부연동영수번호      s30
-            ///'tradeType'              => trim($arr['tradeType']),    //            거래구분            s2   S:매출 C:취소
-            ///'serviceType'            => trim($arr['serviceType']),  //            매장/포장           s2   S:매장 P:포장
-            ///'salesTarget'            => trim($arr['salesTarget']),  //            서비스대상          s2   G:일반 S:직원
-            ///'totalAmount'            => $arr['totalAmount'], //            총주문금액          n
-            ///'paymentAmount'          => $arr['paymentAmount'],      //     결재금액            n
-            ///'discountAmount'         => $arr['discountAmount'],     //     총할인금액          n
-            ///'couponAmount'           => $arr['couponAmount'],       //     쿠폰금액            n
-            ///'cashableAmount'         => $arr['cashableAmount'],     //     현금화금액          n
-            ///'taxationAmount'         => $arr['taxationAmount'],     //     과세대상금액        n
-            ///'dutyAmount'             => $arr['dutyAmount'],         //     면세금액            n
-            ///'totalTax'               => $arr['totalTax'],           //     부가세액            n
-            ///'tableNo'                => trim($arr['tableNo']),      //     테이블번호          s3
-            ///'orgBillNo'              => trim($arr['orgBillNo']),    //     원거래영수번호      s30  반품건원거래번호
-            ///'orderStatus'            => trim($arr['orderStatus']),  //     주문상태            s5   1001주문중 9999주문취소 1000픽업주문취소 1003주문접수 1005주문확인 2007상품준비중 2009픽업대기 2020픽업완료 2085픽업지연 2090픽업지연완료 2099픽업미완료
-            ///'paymentStatus'          => trim($arr['paymentStatus']),//     결재상태            s2   S성공 F실패(부분) F결재시 부분실패
-            ///'cancelBillNo'           => trim($arr['cancelBillNo']); //     취소영수번호        s30  원거래건의취소영수번호
-            ///'receiptPrintCountType'  => trim($arr['receiptPrintCountType']);// 영수증출력갯수타입  s20
-            ///'exchangePrintCountType' => trim($arr['exchangePrintCountType']);// 교환건출력갯수타입  s20
-            ///'filler1'                => trim($arr['filler1']);      //      비고1               s500
-            ///'filler2'                => trim($arr['filler2']);      //      비고2               s500
-            ///'filler3'                => trim($arr['filler3']);      //      비고3               s500
-            ///'filler4'                => trim($arr['filler4']);      //      비고4               s500
-            ///'closeYn'                => trim($arr['closeYn']);      //      마감처리여부        s255
-            ///'closeDate'              => trim($arr['closeDate']);    //      마감일자            s255
-            'salesDaySeq'            => $arr['salesDaySeq'], //                영업일자순번        n
+            'headOfficeId'           => trim($arr['headOfficeId'],  //     본사id             s30
+            'franchiseId'            => trim($arr['franchiseId']),  //     가맹점id           s30
+            'deviceId'               => trim($arr['deviceId']),     //     기기id             s30 
+            'deviceSeq'              => $arr['deviceSeq'],   //            기기번호            n
+            'channelType'            => trim($arr['channelType']),  //     채널구분            s10  ch01:kiosk
+            'outerBillno'            => trim($arr['outerBillno']),  //     외부연동영수번호      s30
+            'tradeType'              => trim($arr['tradeType']),    //     거래구분            s2   S:매출 C:취소
+            'serviceType'            => trim($arr['serviceType']),  //     매장/포장           s2   S:매장 P:포장
+            'salesTarget'            => trim($arr['salesTarget']),  //     서비스대상          s2   G:일반 S:직원
+            'totalAmount'            => $arr['totalAmount'], //            총주문금액          n
+            'paymentAmount'          => $arr['paymentAmount'],      //     결재금액            n
+            'discountAmount'         => $arr['discountAmount'],     //     총할인금액          n
+            'couponAmount'           => $arr['couponAmount'],       //     쿠폰금액            n
+            'cashableAmount'         => $arr['cashableAmount'],     //     현금화금액          n
+            'taxationAmount'         => $arr['taxationAmount'],     //     과세대상금액        n
+            'dutyAmount'             => $arr['dutyAmount'],         //     면세금액            n
+            'totalTax'               => $arr['totalTax'],           //     부가세액            n
+            'tableNo'                => trim($arr['tableNo']),      //     테이블번호          s3
+            'orgBillNo'              => trim($arr['orgBillNo']),    //     원거래영수번호      s30  반품건원거래번호
+            'orderStatus'            => trim($arr['orderStatus']),  //     주문상태            s5   1001주문중 9999주문취소 1000픽업주문취소 1003주문접수 1005주문확인 2007상품준비중 2009픽업대기 2020픽업완료 2085픽업지연 2090픽업지연완료 2099픽업미완료
+            'paymentStatus'          => trim($arr['paymentStatus']),//     결재상태            s2   S성공 F실패(부분) F결재시 부분실패
+            'cancelBillNo'           => trim($arr['cancelBillNo']); //     취소영수번호        s30  원거래건의취소영수번호
+            'receiptPrintCountType'  => trim($arr['receiptPrintCountType']),// 영수증출력갯수타입  s20
+            'exchangePrintCountType' => trim($arr['exchangePrintCountType']),// 교환건출력갯수타입  s20
+            //'additionalInfo'         => $arr['additionalInfo'], //         부가정보              JSON형식 사용안함            
+            'filler1'                => trim($arr['filler1']),      //      비고1               s500
+            'filler2'                => trim($arr['filler2']),      //      비고2               s500
+            'filler3'                => trim($arr['filler3']),      //      비고3               s500
+            'filler4'                => trim($arr['filler4']),      //      비고4               s500
+            'closeYn'                => trim($arr['closeYn']),      //      마감처리여부        s255
+            'closeDate'              => trim($arr['closeDate']),    //      마감일자            s255
+            'salesDaySeq'            => $arr['salesDaySeq'], //             영업일자순번        n
         );
 
 	}

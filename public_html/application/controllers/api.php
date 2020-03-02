@@ -46,7 +46,6 @@ class Api extends CT_Controller {
        // print_r($receiveData);
        //exit;
 
-
     	if (!$univcode) {      
             $message['rCode'] = "0001";
             $message['error']['errorCode'] = "0001";
@@ -173,10 +172,10 @@ class Api extends CT_Controller {
 		// json data Receive
         $receivejson = json_decode(file_get_contents('php://input'), true);  // json data name :order
         $univcode = $_POST['Univcode'];
-        //print_r($receivejson);
-        //exit;
+        print_r($receivejson);
+        exit;
 
-    	if (!$univcode) {      
+        if (!$univcode) {      
             $message['rCode'] = "0001";
             $message['error']['errorCode'] = "0001";
             $message['error']['errorMessage'] = "univcode가 Header에 없습니다.";
@@ -192,61 +191,60 @@ class Api extends CT_Controller {
 		$products = array(); // 2단계:복수
         $options = array();  // 3단계:복수
 		
-		//$payments = array();             // 2단계:단수
-        //$card = array();    // 3단계:복수
-        //$coupon = array();  // 3단계:복수
+		$payments = array();             // 2단계:단수
+        $card = array();    // 3단계:복수
+        $coupon = array();  // 3단계:복수
         
         // 순서상 orderProducts/payments/order 배열 먼저 분리(단수임)
 		$order = $receivejson['order'];
 		$products = $order['orderProducts'];
-		//$payments = $order['payments'];
-        //unset($order['payments']);
-		// $order에 univcode 추가
-		$order['univcode'] = $univcode;
+		$payments = $order['payments'];
 
 		// 순서상 복수인 배열 처리
 		foreach($products as $key => $value) {
 			foreach($value['options'] as $sKey => $svalue) {
                 $options = $svalue['options'];
                 $options['univcode'] = $univcode;
-				$options_param = arrange_param($options,"options");
-                $insertDB = $this->API->insertDB($options_param,"options");
-				if ($insertDB !== RES_CODE_SUCCESS) {
-				    $message['rCode'] = "0002";
-                    $message['error']['errorCode'] = "0002";
-                    $message['error']['errorMessage'] = "options 처리실패!!";
-                    writeLog("[{$sLogFileId}] eCode=".json_encode($message['error']['errorCode'])." eMessage=".json_encode($message['error']['errorMessage']), $sLogPath, $bLogable);
-                   echo json_encode($message);
-                   exit;
-				}
+                $options_param = arrange_param($options,"options");
 			}
-			//$value=orderProducts 복수 배열 model로 던져 DB에 넣자(단 널배열 처리방법)
             unset($value['options']);
-            $Products_param = arrange_param($value,"products");
-            $insertDB = $this->API->insertDB($Products_param,"products");
-            if ($insertDB !== RES_CODE_SUCCESS) {
-			    $message['rCode'] = "0003";
-                $message['error']['errorCode'] = "0003";
-                $message['error']['errorMessage'] = "products 처리실패!!";
-                writeLog("[{$sLogFileId}] eCode=".json_encode($message['error']['errorCode'])." eMessage=".json_encode($message['error']['errorMessage']), $sLogPath, $bLogable);
-                echo json_encode($message);
-                exit;
-			}
+            $products['univcode'] = $univcode;
+            $Products_param = arrange_param($products,"products");
         }
+        // 복수인 payments배열 및 하위 card,coupon처리
+		foreach($payments as $key => $value) {
+			foreach($value['card'] as $sKey => $svalue) {
+                $card = $svalue['card'];
+                $card['univcode'] = $univcode;
+                $card_param = arrange_param($card,"card");
+            }
+            foreach($payments['coupon'] as $sKey => $svalue) {
+                $coupon = $svalue['coupon'];
+                $coupon['univcode'] = $univcode;
+                $coupon_param = arrange_param($coupon,"coupon");
+			}
+            unset($value['card']);
+            unset($value['coupon']);
+            $payments['univcode'] = $univcode;
+            $payments_param = arrange_param($payments,"payments");
+        }        
         unset($order['orderProducts']);
-		$order = $receivejson['order'];
+        unset($order['payments']);
+        $order['univcode'] = $univcode;
         $order_param = arrange_param($order,"order");
-        $insertDB = $this->API->insertDB($order_param,"order");
-		if ($insertDB !== RES_CODE_SUCCESS) {
-		    $message['rCode'] = "0004";
-            $message['error']['errorCode'] = "0004";
-            $message['error']['errorMessage'] = "order 처리실패!!";
+
+        //model로 던져 DB에 트랜잭션 처리를 위해 한방에 처리(단 널배열 처리방법 고민)
+        $insertDB = $this->API->insertDB($order_param, $Products_param, $options_param, $payments_param, $card_param, $coupon_param);
+
+        if ($insertDB !== RES_CODE_SUCCESS) {
+            $message['rCode'] = "0002";
+            $message['error']['errorCode'] = "0002";
+            $message['error']['errorMessage'] = "InsertDB 처리실패!!";
             writeLog("[{$sLogFileId}] eCode=".json_encode($message['error']['errorCode'])." eMessage=".json_encode($message['error']['errorMessage']), $sLogPath, $bLogable);
             echo json_encode($message);
             exit;
         }
-
-		writeLog("[{$sLogFileId}] order=" . json_encode(implode( '/', $order )), $sLogPath, $bLogable);
+		writeLog("[{$sLogFileId}] order=" . json_encode(implode( '/', $options_param )), $sLogPath, $bLogable);
         writeLog("[{$sLogFileId}] orderProducts=" . json_encode(implode( '/', $products )), $sLogPath, $bLogable);
         writeLog("[{$sLogFileId}] orderProductOptions=" . json_encode(implode( '/', $options )), $sLogPath, $bLogable);
         //writeLog("[{$sLogFileId}] payments=" . json_encode(implode( '/', $payments )), $sLogPath, $bLogable);
