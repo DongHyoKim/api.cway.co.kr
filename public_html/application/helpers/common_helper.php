@@ -316,9 +316,9 @@ function arrange_param($arr,$arrtype) {
             'billNo'                 => $billNo,             // order key  영수번호*           s30
     		'createdAt'              => $createdAt,          //            등록일             s30
             'updatedAt'              => $updatedAt,          //            수정일             s30
-            'headOfficeId'           => trim($arr['headOfficeId'],  //     본사id             s30
-            'franchiseId'            => trim($arr['franchiseId']),  //     가맹점id           s30
-            'deviceId'               => trim($arr['deviceId']),     //     기기id             s30 
+            'headOfficeId'           => $headOfficeId,       //            본사id             s30
+            'franchiseId'            => $franchiseId,        //            가맹점id           s30
+            'deviceId'               => $deviceId,           //            기기id             s30 
             'deviceSeq'              => $arr['deviceSeq'],   //            기기번호            n
             'channelType'            => trim($arr['channelType']),  //     채널구분            s10  ch01:kiosk
             'outerBillno'            => trim($arr['outerBillno']),  //     외부연동영수번호      s30
@@ -337,7 +337,7 @@ function arrange_param($arr,$arrtype) {
             'orgBillNo'              => trim($arr['orgBillNo']),    //     원거래영수번호      s30  반품건원거래번호
             'orderStatus'            => trim($arr['orderStatus']),  //     주문상태            s5   1001주문중 9999주문취소 1000픽업주문취소 1003주문접수 1005주문확인 2007상품준비중 2009픽업대기 2020픽업완료 2085픽업지연 2090픽업지연완료 2099픽업미완료
             'paymentStatus'          => trim($arr['paymentStatus']),//     결재상태            s2   S성공 F실패(부분) F결재시 부분실패
-            'cancelBillNo'           => trim($arr['cancelBillNo']); //     취소영수번호        s30  원거래건의취소영수번호
+            'cancelBillNo'           => trim($arr['cancelBillNo']), //     취소영수번호        s30  원거래건의취소영수번호
             'receiptPrintCountType'  => trim($arr['receiptPrintCountType']),// 영수증출력갯수타입  s20
             'exchangePrintCountType' => trim($arr['exchangePrintCountType']),// 교환건출력갯수타입  s20
             //'additionalInfo'         => $arr['additionalInfo'], //         부가정보              JSON형식 사용안함            
