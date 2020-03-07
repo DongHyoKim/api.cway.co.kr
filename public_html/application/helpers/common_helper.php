@@ -106,6 +106,14 @@ function log_auto_file_delete($dir)
     }
 }
 
+//한글인코딩 변경 euc-kr변경
+function convertMSEncoding($str)
+{
+    $str =  mb_convert_encoding($str,  "CP949" , "UTF-8");
+    $str =  mb_convert_encoding($str,  "UTF-8" , "CP949");  
+    return  $str;
+}
+
 function arrange_param($arr,$arrtype) 
 {
 
@@ -292,7 +300,7 @@ function arrange_param($arr,$arrtype)
 
     } else if ($arrtype == "cards") {
 
-        $params = array(
+		$params = array(
             'univcode'               => $arr['univcode'],    // card key  대학코드*            s5
             'saleDay'                => $arr['saleDay'],     // card key  영업일*              s10  YYYY-MM-DD
             'storeCode'              => trim($arr['franchiseCd']), // card key  지점코드             s30  연동처리 ********명칭변경 주의

@@ -267,7 +267,7 @@ class Api extends CT_Controller {
                 $payments_params[$i] = "";
 		    }
 		}
-        // 2.3 복수배열을 보내자 cards
+        // 2.3 복수배열을 보내자 cards(고과장이 카드는 단수로 온다고 함 리마크 처리)
 		if (!empty($cards)) {
 		    $count_cardskeys = count(array_keys($cards));
 			if ($count_cardskeys/count($cards) == 1) {        // 배열속 값의 갯수가 키의 갯수와 일치, 즉 cards 배열이 단수개일 경우
@@ -276,7 +276,11 @@ class Api extends CT_Controller {
         	    $cards['saleDay'] = $order['saleDay'];
 		        $cards['posNo'] = $order['posNo'];
 			    $cards_param = arrange_param($cards,'cards');
-    	    } else if ($countcardskeys/count($cards) > 1) {   // 배열속 값의 갯수가 키의 갯수보다 크다, 즉 cards 배열이 복수개일 경우
+				//$cards_param['issueName'] = mb_convert_encoding($cards['issueName'], "CP949", "UTF-8");
+                //$cards_param['acquirerName'] = mb_convert_encoding($cards['acquirerName'], "CP949", "UTF-8");
+				$cards_param['issueName'] = iconv('utf-8','euc-kr',$cards_param['issueName']); 
+				$cards_param['acquirerName'] = iconv('utf-8','euc-kr',$cards_param['acquirerName']); 
+			/*} else if ($countcardskeys/count($cards) > 1) {   // 배열속 값의 갯수가 키의 갯수보다 크다, 즉 cards 배열이 복수개일 경우
 			    for ($i = 0;$i < count($cards);$i++) {
 			        for ($j = 0;$j < count($cards[$i]);$j++) {
         			    $cards[$i][$j]['univcode'] = $univcode;
@@ -284,13 +288,15 @@ class Api extends CT_Controller {
    		    	        $cards[$i][$j]['saleDay'] = $order['saleDay'];
         	            $cards[$i][$j]['posNo'] = $order['posNo'];
 		                $cards_param[$i][$j] = arrange_param($cards[$i][$j],"cards");
+				        $cards_param[$i][$j]['issueName'] = mb_convert_encoding($cards[$i][$j]['issueName'], "CP949", "UTF-8");
+                        $cards_param[$i][$j]['acquirerName'] = mb_convert_encoding($cards[$i][$j]['acquirerName'], "CP949", "UTF-8");
 				    }
-			    }
+			    } */
      	    } 
 		} else {
 			$cards_param = '';
 		}
-        // 2.4 복수배열을 보내자 coupons
+        // 2.4 복수배열을 보내자 coupons(고과장이 카드는 단수로 온다고 함 리마크 처리)
 		
         //print_r($coupons);
 		//echo"empty($coupons) = ".empty($coupons);
@@ -298,7 +304,8 @@ class Api extends CT_Controller {
 	    //exit;
 
 		if(!empty($coupons)) {
-            /*
+            // 배열이 없는 경우 에러가 나서 일단 이대로 둠
+			/*
 			$count_couponskeys = count(array_keys($coupons));
 			if ($count_couponskeys/count($coupons) == 1) {
 		        $coupons['univcode'] = $univcode;
@@ -306,7 +313,7 @@ class Api extends CT_Controller {
   		        $coupons['saleDay'] = $order['saleDay'];
     	        $coupons['posNo'] = $order['posNo'];
 	    	    $coupons_param = arrange_param($coupons,'coupons');
-		    } else if ($count_couponskeys/count($coupons) > 1 {
+		    /* } else if ($count_couponskeys/count($coupons) > 1 {
 			    for ($i = 0;$i < count($coupons);$i++) {
 			        for ($j = 0;$j < count($coupons[$i]);$j++) {
 			            $coupons[$i][$j]['univcode'] = $univcode;
@@ -315,8 +322,8 @@ class Api extends CT_Controller {
 	    	            $coupons[$i][$j]['posNo'] = $order['posNo'];
 		    	        $coupons_param[$i][$j] = arrange_param($coupons[$i][$j],'coupons');
 				    }
-			    }
-		    } */
+			    } */
+		    } 
 		} else {
 			$coupons_param = '';
 		}
@@ -330,9 +337,7 @@ class Api extends CT_Controller {
 		//exit;
 
         //model로 던져 DB에 트랜잭션 처리를 위해 한방에 처리(단 널배열 처리방법 고민)
-
-		//$insertDB = $this->API->insertDB($order_param, $Products_params, $options_params, $payments_params, $cards_param, $coupons_param);
-		$insertDB = $this->API->insertDB($order_param, $Products_params);
+		$insertDB = $this->API->insertDB($order_param, $Products_params, $options_params, $payments_params, $cards_param, $coupons_param);
 
         if ($insertDB !== RES_CODE_SUCCESS) {
             $message['rCode'] = "0002";
@@ -342,22 +347,37 @@ class Api extends CT_Controller {
             echo json_encode($message);
             exit;
         }
-		//writeLog("[{$sLogFileId}] order=" . json_encode(implode( '|', $order_param )), $sLogPath, $bLogable);
-        writeLog("[{$sLogFileId}] orderProducts=" . json_encode(implode( '|', $Products_params )), $sLogPath, $bLogable);
-        //writeLog("[{$sLogFileId}] orderProductOptions=" . json_encode(implode( '/', $options )), $sLogPath, $bLogable);
-        //writeLog("[{$sLogFileId}] payments=" . json_encode(implode( '/', $payments )), $sLogPath, $bLogable);
-        //writeLog("[{$sLogFileId}] cardPaymentDetail=" . json_encode(implode( '/', $cardPaymentDetail )), $sLogPath, $bLogable);
-        //writeLog("[{$sLogFileId}] couponPaymentDetail=" . json_encode(implode( '/', $couponPaymentDetail )), $sLogPath, $bLogable);
-        
+		// 이하는 모두 로그를 쓰는 루틴인데요 나중에 정리해야 합니다. 무식하게 로그한줄마다 for를 돌리고 있습니다. 애고 나중에 모아서 할 예정!!
+		writeLog("[{$sLogFileId}] order=" . json_encode(implode( '|', $order_param )), $sLogPath, $bLogable);
+		for ($i = 0;$i < count($Products_params);$i++) {
+			writeLog("[{$sLogFileId}] Products[".$i."] = " . json_encode(implode( '|', $Products_params[$i] )), $sLogPath, $bLogable);
+		}
+        for ($i = 0;$i < count($options_params);$i++) {
+            for ($j = 0;$j < count($options_params[$i]);$j++) {
+				writeLog("[{$sLogFileId}] Options[".$i."][".$j."] =" . json_encode(implode( '|', $options_params[$i][$j] )), $sLogPath, $bLogable);
+			}
+		}
+		for ($i = 0;$i < count($payments_params);$i++) {
+			writeLog("[{$sLogFileId}] payments[".$i."] = " . json_encode(implode( '|', $payments_params[$i] )), $sLogPath, $bLogable);
+		}
+		if(!empty($cards_param)) {
+			$cards_param['issueName'] = $cards['issueName'];       // 로그를 위한 한글처리
+			$cards_param['acquirerName'] = $cards['acquirerName']; // 로그를 위한 한글처리
+            writeLog("[{$sLogFileId}] cards=" . json_encode(implode( '|', $cards_param )), $sLogPath, $bLogable);
+		} else {
+            writeLog("[{$sLogFileId}] cards= 데이터가 없습니다.", $sLogPath, $bLogable);
+		}
+		if(!empty($coupons_param)) {
+            writeLog("[{$sLogFileId}] coupons=" . json_encode(implode( '|', $coupons_param )), $sLogPath, $bLogable);
+		} else {
+            writeLog("[{$sLogFileId}] coupons= 데이터가 없습니다.", $sLogPath, $bLogable);
+		}
 		writeLog("[{$sLogFileId}] result=" . json_encode($message), $sLogPath, $bLogable);
         writeLog("[{$sLogFileId}] -------------------------------- END --------------------------------", $sLogPath, $bLogable);
 
 		echo json_encode($message);
         return;
-
     }
-
 }    
-    
 /* End of file api.php */
 /* Location: ./application/controllers/api.php */
