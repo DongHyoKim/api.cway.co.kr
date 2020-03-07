@@ -6,7 +6,7 @@ class Api extends CT_Controller {
 
     public function __construct(){
 		parent::__construct();
-		$this->load->model('Api_model','API');
+		$this->load->model('Api_model2','API');
     }	
     
     public function index(){
@@ -16,7 +16,7 @@ class Api extends CT_Controller {
     //주문정보 receive api
 	public function receivedata() {
         
-        
+        /*
 		$logs = array(
             'sLogFileId'    => time() . '_' . substr(md5(uniqid(rand(), true)), 0, 5),
             'sLogPath'        => BASEPATH . '../../logs/receivedata/' . date('Ymd') . '_data.log',
@@ -65,7 +65,7 @@ class Api extends CT_Controller {
 		$payments = array();             // 2단계:단수
         $cardPaymentDetail = array();    // 3단계:복수
         $couponPaymentDetail = array();  // 3단계:복수
-		*/
+		
 
         //$order = $receiveData;// 이런경우는
 		$order = $receiveData['order'];
@@ -101,7 +101,7 @@ class Api extends CT_Controller {
 
 		 unset($value['orderProductOptions']); 나중에
 		
-		*/
+		
 
         //$order = $receiveData;// 이런경우는
 		$order = $receiveData['order'];
@@ -136,19 +136,20 @@ class Api extends CT_Controller {
         writeLog("[{$sLogFileId}] payments=" . json_encode(implode( '/', $payments )), $sLogPath, $bLogable);
         writeLog("[{$sLogFileId}] cardPaymentDetail=" . json_encode(implode( '/', $cardPaymentDetail )), $sLogPath, $bLogable);
         writeLog("[{$sLogFileId}] couponPaymentDetail=" . json_encode(implode( '/', $couponPaymentDetail )), $sLogPath, $bLogable);
-		*/
+		
                 
 		writeLog("[{$sLogFileId}] result=" . json_encode($message), $sLogPath, $bLogable);
         writeLog("[{$sLogFileId}] -------------------------------- END --------------------------------", $sLogPath, $bLogable);
 
 		echo json_encode($message);
         return;
+		*/
     }
 
     //주문정보 receive api test
     public function receivetest() {
         
-		$logs = array(
+    	$logs = array(
             'sLogFileId'    => time() . '_' . substr(md5(uniqid(rand(), true)), 0, 5),
             'sLogPath'      => BASEPATH . '../../logs/receivedata/' . date('Ymd') . '_data.log',
             'bLogable'      => true
@@ -171,9 +172,7 @@ class Api extends CT_Controller {
         
 		// json data Receive
         $receivejson = json_decode(file_get_contents('php://input'), true);  // json data name :order
-        $univcode = $_POST['Univcode'];
-        print_r($receivejson);
-        exit;
+        $univcode = $_POST['UnivCode'];
 
         if (!$univcode) {      
             $message['rCode'] = "0001";
@@ -184,57 +183,156 @@ class Api extends CT_Controller {
             exit;
         }
         writeLog("[{$sLogFileId}] univcode=" . json_encode($univcode), $sLogPath, $bLogable);
-
+        
         //array dividing
-        // 각 배열의 정의
+        // 각 배열의 정의와 선언
         $order = array();    // 1단계기본배열:단수
+		$order = $receivejson['order'];
+
 		$products = array(); // 2단계:복수
         $options = array();  // 3단계:복수
-		
-		$payments = array();             // 2단계:단수
-        $card = array();    // 3단계:복수
-        $coupon = array();  // 3단계:복수
-        
-        // 순서상 orderProducts/payments/order 배열 먼저 분리(단수임)
-		$order = $receivejson['order'];
+		$payments = array(); // 2단계:복수
+        $cards = array();     // 3단계:복수
+        $coupons = array();   // 3단계:복수
+
+        // 순서상 orderProducts(복)/payments(복)/order(단) 배열 먼저 분리(단수임)
+		$order['univcode'] = $univcode;
 		$products = $order['orderProducts'];
 		$payments = $order['payments'];
-
-		// 순서상 복수인 배열 처리
-		foreach($products as $key => $value) {
-			foreach($value['options'] as $sKey => $svalue) {
-                $options = $svalue['options'];
-                $options['univcode'] = $univcode;
-                $options_param = arrange_param($options,"options");
-			}
-            unset($value['options']);
-            $products['univcode'] = $univcode;
-            $Products_param = arrange_param($products,"products");
-        }
-        // 복수인 payments배열 및 하위 card,coupon처리
-		foreach($payments as $key => $value) {
-			foreach($value['card'] as $sKey => $svalue) {
-                $card = $svalue['card'];
-                $card['univcode'] = $univcode;
-                $card_param = arrange_param($card,"card");
-            }
-            foreach($payments['coupon'] as $sKey => $svalue) {
-                $coupon = $svalue['coupon'];
-                $coupon['univcode'] = $univcode;
-                $coupon_param = arrange_param($coupon,"coupon");
-			}
-            unset($value['card']);
-            unset($value['coupon']);
-            $payments['univcode'] = $univcode;
-            $payments_param = arrange_param($payments,"payments");
-        }        
         unset($order['orderProducts']);
         unset($order['payments']);
-        $order['univcode'] = $univcode;
-        $order_param = arrange_param($order,"order");
+
+		// 배열의 분리
+		// products와 options의 분리
+		if (empty($products)) {
+			$products = '';
+			$options = '';
+		} else {
+		    for ($i = 0;$i < count($products);$i++) {
+                $options[$i] = $products[$i]['orderProductOptions'];
+			    if (empty($options)) $options = '';             // options 배열에 값이 없는지 확인
+			    unset($products[$i]['orderProductOptions']);
+		    }
+		}
+		// payments와 card,coupon 분리
+
+		if (empty($payments)) {
+			$payments = '';
+		    $cards = '';
+			$coupons = '';
+		} else {
+		    for ($i = 0;$i < count($payments);$i++) {
+                $cards = $payments[$i]['cardPaymentDetail'];
+                $coupons = $payments[$i]['couponPaymentDetail'];
+                if (empty($cards)) $cards = "";                 // cards 배열에 값이 없는지 확인
+                if (empty($coupons)) $coupons = "";             // coupons 배열에 값이 없는지 확인
+    		    unset($payments[$i]['cardPaymentDetail']);
+    		    unset($payments[$i]['couponPaymentDetail']);
+		    }
+		}
+        // params 만들기
+		// 1. 1차배열 order의 param 만들기
+		$order_param = arrange_param($order,'order');
+		// 2.1 복수배열을 보내자 products/options,
+		for ($i = 0;$i < count($products);$i++) {
+		    if (!empty($products[$i])) {
+ 			    $products[$i]['univcode'] = $univcode;                 // univcode 보내주기
+				$products[$i]['franchiseCd'] = $order['franchiseCd'];  // franchiseCd(=storecode)는 order에서만 보내주네요
+			    $products[$i]['posNo'] = $order['posNo'];              // posNo는 products에 없네요
+			    $Products_params[$i] = arrange_param($products[$i],'products');
+		    } else {
+                $Products_params[$i] = "";
+		    }
+			for ($j = 0;$j < count($options[$i]);$j++) {
+   		        if (!empty($options[$i][$j])) {
+                    $options[$i][$j]['univcode'] = $univcode;                 // franchiseCd(=storecode)는 order에서만 보내주네요
+ 			        $options[$i][$j]['franchiseCd'] = $order['franchiseCd'];  // franchiseCd(=storecode)는 order에서만 보내주네요
+			        $options[$i][$j]['saleDay'] = $order['saleDay'];          // saleDay는 options 없네요
+			        $options[$i][$j]['posNo'] = $order['posNo'];              // posNo는 options 없네요
+   		            $options[$i][$j]['billNo'] = $order['billNo'];            // billNo는 options 없네요
+			        $options_params[$i][$j] = arrange_param($options[$i][$j],'options');
+		        } else {
+                    $options_params[$i][$j] = "";
+		        }
+			}
+		}
+		// 2.2 복수배열을 보내자 payments
+		for ($i = 0;$i < count($payments);$i++) {
+		    if (!empty($payments[$i])) {
+   			    $payments[$i]['univcode'] = $univcode;
+				$payments[$i]['franchiseCd'] = $order['franchiseCd'];  // franchiseCd(=storecode)는 order에서만 보내주네요
+			    $payments[$i]['posNo'] = $order['posNo'];              // posNo는 payments에 없네요
+			    $payments_params[$i] = arrange_param($payments[$i],'payments');
+		    } else {
+                $payments_params[$i] = "";
+		    }
+		}
+        // 2.3 복수배열을 보내자 cards
+		if (!empty($cards)) {
+		    $count_cardskeys = count(array_keys($cards));
+			if ($count_cardskeys/count($cards) == 1) {        // 배열속 값의 갯수가 키의 갯수와 일치, 즉 cards 배열이 단수개일 경우
+ 		        $cards['univcode'] = $univcode;
+    		    $cards['franchiseCd'] = $order['franchiseCd'];
+        	    $cards['saleDay'] = $order['saleDay'];
+		        $cards['posNo'] = $order['posNo'];
+			    $cards_param = arrange_param($cards,'cards');
+    	    } else if ($countcardskeys/count($cards) > 1) {   // 배열속 값의 갯수가 키의 갯수보다 크다, 즉 cards 배열이 복수개일 경우
+			    for ($i = 0;$i < count($cards);$i++) {
+			        for ($j = 0;$j < count($cards[$i]);$j++) {
+        			    $cards[$i][$j]['univcode'] = $univcode;
+   		                $cards[$i][$j]['franchiseCd'] = $order['franchiseCd'];
+   		    	        $cards[$i][$j]['saleDay'] = $order['saleDay'];
+        	            $cards[$i][$j]['posNo'] = $order['posNo'];
+		                $cards_param[$i][$j] = arrange_param($cards[$i][$j],"cards");
+				    }
+			    }
+     	    } 
+		} else {
+			$cards_param = '';
+		}
+        // 2.4 복수배열을 보내자 coupons
+		
+        //print_r($coupons);
+		//echo"empty($coupons) = ".empty($coupons);
+		//echo"count_couponskeys = ".count(array_keys($coupons));
+	    //exit;
+
+		if(!empty($coupons)) {
+            /*
+			$count_couponskeys = count(array_keys($coupons));
+			if ($count_couponskeys/count($coupons) == 1) {
+		        $coupons['univcode'] = $univcode;
+		        $coupons['franchiseCd'] = $order['franchiseCd'];
+  		        $coupons['saleDay'] = $order['saleDay'];
+    	        $coupons['posNo'] = $order['posNo'];
+	    	    $coupons_param = arrange_param($coupons,'coupons');
+		    } else if ($count_couponskeys/count($coupons) > 1 {
+			    for ($i = 0;$i < count($coupons);$i++) {
+			        for ($j = 0;$j < count($coupons[$i]);$j++) {
+			            $coupons[$i][$j]['univcode'] = $univcode;
+   			            $coupons[$i][$j]['franchiseCd'] = $order['franchiseCd'];
+      		            $coupons[$i][$j]['saleDay'] = $order['saleDay'];
+	    	            $coupons[$i][$j]['posNo'] = $order['posNo'];
+		    	        $coupons_param[$i][$j] = arrange_param($coupons[$i][$j],'coupons');
+				    }
+			    }
+		    } */
+		} else {
+			$coupons_param = '';
+		}
+
+		//print_r($order_param);
+		//print_r($Products_params);
+        //print_r($options_params);
+		//print_r($payments_params);
+		//print_r($cards_param);
+		//print_r($coupons_param);
+		//exit;
 
         //model로 던져 DB에 트랜잭션 처리를 위해 한방에 처리(단 널배열 처리방법 고민)
-        $insertDB = $this->API->insertDB($order_param, $Products_param, $options_param, $payments_param, $card_param, $coupon_param);
+
+		//$insertDB = $this->API->insertDB($order_param, $Products_params, $options_params, $payments_params, $cards_param, $coupons_param);
+		$insertDB = $this->API->insertDB($order_param, $Products_params);
 
         if ($insertDB !== RES_CODE_SUCCESS) {
             $message['rCode'] = "0002";
@@ -244,9 +342,9 @@ class Api extends CT_Controller {
             echo json_encode($message);
             exit;
         }
-		writeLog("[{$sLogFileId}] order=" . json_encode(implode( '/', $options_param )), $sLogPath, $bLogable);
-        writeLog("[{$sLogFileId}] orderProducts=" . json_encode(implode( '/', $products )), $sLogPath, $bLogable);
-        writeLog("[{$sLogFileId}] orderProductOptions=" . json_encode(implode( '/', $options )), $sLogPath, $bLogable);
+		//writeLog("[{$sLogFileId}] order=" . json_encode(implode( '|', $order_param )), $sLogPath, $bLogable);
+        writeLog("[{$sLogFileId}] orderProducts=" . json_encode(implode( '|', $Products_params )), $sLogPath, $bLogable);
+        //writeLog("[{$sLogFileId}] orderProductOptions=" . json_encode(implode( '/', $options )), $sLogPath, $bLogable);
         //writeLog("[{$sLogFileId}] payments=" . json_encode(implode( '/', $payments )), $sLogPath, $bLogable);
         //writeLog("[{$sLogFileId}] cardPaymentDetail=" . json_encode(implode( '/', $cardPaymentDetail )), $sLogPath, $bLogable);
         //writeLog("[{$sLogFileId}] couponPaymentDetail=" . json_encode(implode( '/', $couponPaymentDetail )), $sLogPath, $bLogable);
@@ -256,8 +354,9 @@ class Api extends CT_Controller {
 
 		echo json_encode($message);
         return;
+
     }
-    
+
 }    
     
 /* End of file api.php */
