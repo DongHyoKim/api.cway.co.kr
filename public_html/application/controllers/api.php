@@ -59,8 +59,8 @@ class Api extends CT_Controller {
 		$products = array(); // 2단계:복수
         $options = array();  // 3단계:복수
 		$payments = array(); // 2단계:복수
-        $cards = array();     // 3단계:복수
-        $coupons = array();   // 3단계:복수
+        $cards = array();     // 3단계:단수
+        $coupons = array();   // 3단계:단수
 
         // 순서상 orderProducts(복)/payments(복)/order(단) 배열 먼저 분리(단수임)
 		$order['univcode'] = $univcode;
@@ -135,7 +135,7 @@ class Api extends CT_Controller {
 		    }
 		}
         // 2.3 복수배열을 보내자 cards(고과장이 카드는 단수로 온다고 함 리마크 처리)
-		if (!empty($cards)) {
+		if (is_array($cards)) {
 		    $count_cardskeys = count(array_keys($cards));
 			if ($count_cardskeys/count($cards) == 1) {        // 배열속 값의 갯수가 키의 갯수와 일치, 즉 cards 배열이 단수개일 경우
  		        $cards['univcode'] = $univcode;
@@ -145,8 +145,8 @@ class Api extends CT_Controller {
 			    $cards_param = arrange_param($cards,'cards');
 				//$cards_param['issueName'] = mb_convert_encoding($cards['issueName'], "CP949", "UTF-8");
                 //$cards_param['acquirerName'] = mb_convert_encoding($cards['acquirerName'], "CP949", "UTF-8");
-				$cards_param['issueName'] = iconv('utf-8','euc-kr',$cards_param['issueName']); 
-				$cards_param['acquirerName'] = iconv('utf-8','euc-kr',$cards_param['acquirerName']); 
+				//$cards_param['issueName'] = iconv('utf-8','euc-kr',$cards_param['issueName']); 
+				//$cards_param['acquirerName'] = iconv('utf-8','euc-kr',$cards_param['acquirerName']); 
 			/*} else if ($countcardskeys/count($cards) > 1) {   // 배열속 값의 갯수가 키의 갯수보다 크다, 즉 cards 배열이 복수개일 경우
 			    for ($i = 0;$i < count($cards);$i++) {
 			        for ($j = 0;$j < count($cards[$i]);$j++) {
@@ -170,9 +170,8 @@ class Api extends CT_Controller {
 		//echo"count_couponskeys = ".count(array_keys($coupons));
 	    //exit;
 
-		if(!empty($coupons)) {
-            // 배열이 없는 경우 에러가 나서 일단 이대로 둠
-			/*
+        // 배열이 없는 경우 에러(http 500)가 나서 일단 이대로 둠: is_array함수를 사용하여 에러를 잡음
+		if(is_array($coupons)) {
 			$count_couponskeys = count(array_keys($coupons));
 			if ($count_couponskeys/count($coupons) == 1) {
 		        $coupons['univcode'] = $univcode;
