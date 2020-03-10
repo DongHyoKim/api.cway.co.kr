@@ -70,13 +70,15 @@ $db['default']['stricton'] = FALSE;
 
 $json_env_array = array();
 
-// $_POST['Univcode']와 $receiveHeader['univcode']
+// $_POST['UnivCode']와 $receiveHeader['univcode']
 $receiveHeader = apache_request_headers();
 if(isset($receiveHeader['univcode'])){
-    $_POST['Univcode'] = $receiveHeader['univcode'];
+    $_POST['UnivCode'] = $receiveHeader['univcode'];
 }
+//echo $_POST;
+//exit;
 
-if(!isset($_POST['Univcode'])) {
+if(!isset($_POST['UnivCode'])) {
    $json_env_array['status'] = -10;    
    $json_env_array['message'] = "대학교코드가 존재하지 않습니다.";
    echo json_encode($json_env_array);      
@@ -84,21 +86,21 @@ if(!isset($_POST['Univcode'])) {
 }
 
 $DB_CONNECTION = array(
-    "00106"=> array("hostname"=>"203.252.73.155,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00106001") //KangWon =>연결됨
-  , "00114"=> array("hostname"=>"203.255.23.244,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00114001") //KyungSang
-  , "00121"=> array("hostname"=>"203.250.126.175,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00121001") //BuKyung
-  , "00117"=> array("hostname"=>"220.67.177.229,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00117001") //SangJi
-  , "00113"=> array("hostname"=>"219.255.132.117,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00113001") //Ewha =>연결됨
-  , "00116"=> array("hostname"=>"220.71.99.157,8433",  "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00116001") //JeonNam =>연결됨
-  , "00103"=> array("hostname"=>"203.254.129.67,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00103001") //JeonBuk
-  , "00111"=> array("hostname"=>"203.253.209.174,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00111001") //Jeju
-  , "00123"=> array("hostname"=>"168.188.72.211,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00123001") //ChungNam
-  , "00120"=> array("hostname"=>"210.115.160.44,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00120001") //ChungBuk
-  , "00112"=> array("hostname"=>"203.253.68.97,8433",  "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00112001") //Hufs
-  , "00100"=> array("hostname"=>"0010001.CWAY.KR,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"VENDINGM")    //CwayTest
+    "00106"=> array("hostname"=>"0010601.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00106001") //KangWon =>연결됨
+  , "00114"=> array("hostname"=>"0011401.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00114001") //KyungSang
+  , "00121"=> array("hostname"=>"0012101.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00121001") //BuKyung
+  , "00117"=> array("hostname"=>"0011701.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00117001") //SangJi
+  , "00113"=> array("hostname"=>"0011301.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00113001") //Ewha =>연결됨
+  , "00116"=> array("hostname"=>"0011601.cway.kr,8433",  "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00116001") //JeonNam =>연결됨
+  , "00103"=> array("hostname"=>"0010301.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00103001") //JeonBuk
+  , "00111"=> array("hostname"=>"0011101.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00111001") //Jeju
+  , "00123"=> array("hostname"=>"0012301.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00123001") //ChungNam
+  , "00120"=> array("hostname"=>"0012001.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00120001") //ChungBuk
+  , "00112"=> array("hostname"=>"0011201.cway.kr,8433",  "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00112001") //Hufs
+  , "00100"=> array("hostname"=>"0010001.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"VENDINGM")    //CwayTest
 );
 
-if(! array_key_exists ($_POST['Univcode'] , $DB_CONNECTION) ){
+if(! array_key_exists ($_POST['UnivCode'] , $DB_CONNECTION) ){
    $json_env_array['status'] = -1;    
    $json_env_array['message'] = "존재하지 않는 대학교코드입니다.";
    echo json_encode($json_env_array);      
@@ -106,10 +108,10 @@ if(! array_key_exists ($_POST['Univcode'] , $DB_CONNECTION) ){
 }
 
 
-$db['default']['hostname'] = $DB_CONNECTION[$_POST['Univcode']]['hostname'];
-$db['default']['username'] = $DB_CONNECTION[$_POST['Univcode']]['username'];
-$db['default']['password'] = $DB_CONNECTION[$_POST['Univcode']]['password'];
-$db['default']['database'] = $DB_CONNECTION[$_POST['Univcode']]['database'];
+$db['default']['hostname'] = $DB_CONNECTION[$_POST['UnivCode']]['hostname'];
+$db['default']['username'] = $DB_CONNECTION[$_POST['UnivCode']]['username'];
+$db['default']['password'] = $DB_CONNECTION[$_POST['UnivCode']]['password'];
+$db['default']['database'] = $DB_CONNECTION[$_POST['UnivCode']]['database'];
 $db['default']['dbdriver'] = 'sqlsrv';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = FALSE;

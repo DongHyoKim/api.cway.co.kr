@@ -84,16 +84,18 @@ class Api_model2 extends CI_Model {
 		for ($i = 0;$i < count($products);$i++) { 
 			$this->db->query($sp_products,$products[$i]); 
 		}
-        for ($i = 0;$i < count($options);$i++) {
-	        for ($j = 0;$j < count($options[$i]);$j++) {
-			    $this->db->query($sp_options,$options[$i][$j]);
-			}
+		if (is_array($options)) {
+			for ($i = 0;$i < count($options);$i++) {
+	            for ($j = 0;$j < count($options[$i]);$j++) {
+			        $this->db->query($sp_options,$options[$i][$j]);
+			    }
+		    }
 		}
 		for ($i = 0;$i < count($payments);$i++) { 
 			$this->db->query($sp_payments,$payments[$i]); 
 		}
-        if(!empty($cards)) $this->db->query($sp_cards,$cards);
-        if(!empty($coupons)) $this->db->query($sp_coupons,$coupons);
+        if(is_array($cards)) $this->db->query($sp_cards,$cards);
+        if(is_array($coupons)) $this->db->query($sp_coupons,$coupons);
         // transaction end
 		$this->db->trans_complete();
 
