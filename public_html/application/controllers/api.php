@@ -59,15 +59,19 @@ class Api extends CT_Controller {
 		$products = array(); // 2단계:복수
         $options = array();  // 3단계:복수
 		$payments = array(); // 2단계:복수
-        $cards = array();     // 3단계:단수
-        $coupons = array();   // 3단계:단수
+		$benefits = array(); // 2단계:복수
+		$cards = array();    // 3단계:단수
+        $coupons = array();  // 3단계:단수
+
 
         // 순서상 orderProducts(복)/payments(복)/order(단) 배열 먼저 분리(단수임)
 		$order['univcode'] = $univcode;
 		$products = $order['orderProducts'];
 		$payments = $order['payments'];
+		$benefits = $order['benefits'];
         unset($order['orderProducts']);
         unset($order['payments']);
+        unset($order['benefits']);
 
 		// 배열의 분리
 		// products와 options의 분리
@@ -90,8 +94,8 @@ class Api extends CT_Controller {
 		    for ($i = 0;$i < count($payments);$i++) {
                 $cards = $payments[$i]['cardPaymentDetail'];
                 $coupons = $payments[$i]['couponPaymentDetail'];
-                if (empty($cards)) $cards = "";                 // cards 배열에 값이 없는지 확인
-                if (empty($coupons)) $coupons = "";             // coupons 배열에 값이 없는지 확인
+                if (is_array($cards)) $cards = "";                 // cards 배열에 값이 없는지 확인
+                if (is_array($coupons)) $coupons = "";             // coupons 배열에 값이 없는지 확인
     		    unset($payments[$i]['cardPaymentDetail']);
     		    unset($payments[$i]['couponPaymentDetail']);
 		    }
@@ -126,9 +130,10 @@ class Api extends CT_Controller {
                 $options_params[$i][$j] = "";
 		    }
 		}
+
 		// 2.2 복수배열을 보내자 payments
 		for ($i = 0;$i < count($payments);$i++) {
-		    if (!empty($payments[$i])) {
+		    if (is_array($payments[$i])) {
    			    $payments[$i]['univcode'] = $univcode;
 				$payments[$i]['franchiseCd'] = $order['franchiseCd'];  // franchiseCd(=storecode)는 order에서만 보내주네요
 			    $payments[$i]['posNo'] = $order['posNo'];              // posNo는 payments에 없네요
@@ -137,7 +142,8 @@ class Api extends CT_Controller {
                 $payments_params[$i] = "";
 		    }
 		}
-        // 2.3 복수배열을 보내자 cards(고과장이 카드는 단수로 온다고 함 리마크 처리)
+
+		// 2.3 복수배열을 보내자 cards(고과장이 카드는 단수로 온다고 함 리마크 처리)
 		if (is_array($cards)) {
 		    $count_cardskeys = count(array_keys($cards));
 			if ($count_cardskeys/count($cards) == 1) {        // 배열속 값의 갯수가 키의 갯수와 일치, 즉 cards 배열이 단수개일 경우
@@ -164,9 +170,23 @@ class Api extends CT_Controller {
 		} else {
 			$coupons_param = '';
 		}
+        // 2.5 추가) benefits array
+    	if (is_array($benefits[$i])) {
+		    for ($i = 0;$i < count($benefits);$i++) {
+				$benefits[$i]['univcode'] = $univcode;
+  			    $benefits[$i]['franchiseCd'] = $order['franchiseCd'];  // franchiseCd(=storecode)는 order에서만 보내주네요
+  		        $benefits[$i]['saleDay'] = $order['saleDay'];          // saleDay는 options 없네요
+		    	$benefits[$i]['posNo'] = $order['posNo'];              // posNo는 options 없네요
+   		        $benefits[$i]['billNo'] = $order['billNo'];            // billNo는 options 없네요
+                $benefits[$i]['paymentSeq'] = $payments[$i]['paymentSeq']; // paymentSeq는 payments에 있어요
+				$benefits_params[$i] = arrange_param($benefits[$i],'benefits');
+			} 
+		} else {
+            $benefits_params = "";
+		}
 
         //model로 던져 DB에 트랜잭션 처리를 위해 한방에 처리(단 널배열 처리방법 고민 is_array로 해결함.)
-		$insertDB = $this->API->insertDB($order_param, $Products_params, $options_params, $payments_params, $cards_param, $coupons_param);
+		$insertDB = $this->API->insertDB($order_param, $Products_params, $options_params, $payments_params, $cards_param, $coupons_param, $benefits_params );
 
         if ($insertDB !== RES_CODE_SUCCESS) {
             $message['rCode'] = "0002";
@@ -203,6 +223,12 @@ class Api extends CT_Controller {
 		} else {
             writeLog("[{$sLogFileId}] coupons= 데이터가 없습니다.", $sLogPath, $bLogable);
 		}
+		if (is_array($benefits_params) {
+    		for ($i = 0;$i < count($benefits_params);$i++) {
+			    writeLog("[{$sLogFileId}] benefits[".$i."] = " . json_encode(implode( '|', $benefits_params[$i] )), $sLogPath, $bLogable);
+		    }
+		}
+
 		writeLog("[{$sLogFileId}] result=" . json_encode($message), $sLogPath, $bLogable);
         writeLog("[{$sLogFileId}] -------------------------------- END --------------------------------", $sLogPath, $bLogable);
 

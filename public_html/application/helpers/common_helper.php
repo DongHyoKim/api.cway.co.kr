@@ -348,6 +348,22 @@ function arrange_param($arr,$arrtype)
             'filler3'                => trim($arr['filler3']),      //             비고3               s500
         );
 
+	} else if ($arrtype == "benefits") {
+
+		$params = array(
+            'univcode'               => $arr['univcode'],           // benefits key  대학코드*          s5
+            'saleDay'                => $arr['saleDay'],            // benefits key  영업일*            s10  YYYY-MM-DD
+            'storeCode'              => trim($arr['franchiseCd']),  // benefits key  지점코드           s30  연동처리 ********명칭변경 주의
+            'posNo'                  => trim($arr['posNo']),        // benefits key  포스번호*          s5   연동 기기번호
+            'billNo'                 => trim($arr['billNo']),       // benefits key  영수번호*          s30
+            'paymentSeq'             => $arr['paymentSeq'],         // benefits key  결재순번*          n
+    		'createdAt'              => trim($arr['createdAt']),    //             등록일              s30
+            'updatedAt'              => trim($arr['updatedAt']),    //             수정일              s30
+            'moduleId'               => $arr['moduleId'],           //               포인트적립모듈
+            'CPT_MEMBER'             => $arr['mediaNo'],            //               조합원번호
+			'CPT_AMOUNT'             => implode('|',$arr['additionalInfo']), //      적립가능 상품의 총금액
+		);
+
 	}
     return $params;	
 }

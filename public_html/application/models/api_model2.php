@@ -7,7 +7,7 @@ class Api_model2 extends CI_Model {
 
     // insertDB
     //function insertDB($order,$products,$options,$payments,$cards,$coupons) {
-	function insertDB($order, $products, $options, $payments, $cards, $coupons) {
+	function insertDB($order, $products, $options, $payments, $cards, $coupons, $benefits) {
 
 		global $db;
 
@@ -20,6 +20,7 @@ class Api_model2 extends CI_Model {
 			'payments'  => "[VENDINGM].[dbo].[SP_ITMS_PAYMENTS];1 ",
 			'cards'     => "[VENDINGM].[dbo].[SP_ITMS_CARDPAYMENTSDETAIL];1 ",
 			'coupons'   => "[VENDINGM].[dbo].[SP_ITMS_COUPONPAYMENTSDETAIL];1 ",
+			'benefits'  => "[VENDINGM].[dbo].[SP_ITMS_PROFITSALETOTAL];1 ",
 		);
 		// '?'를 배열의 키갯수 만큼 붙이자!!
 		$questionmark = '';
@@ -50,7 +51,7 @@ class Api_model2 extends CI_Model {
 		$questionmark .= '? '; 
         $sp_payments = $sp_arr['payments'].$questionmark;
 
-        if(!empty($cards)) {
+        if(is_array($cards)) {
 			$questionmark = '';
 		    for ($i = 0;$i < count(array_keys($cards))-1;$i++) { 
 			    $questionmark .= '?, '; 
@@ -65,7 +66,7 @@ class Api_model2 extends CI_Model {
 		//print_r($cards);
 		//exit;
 
-        if(!empty($coupons)) {
+        if(is_array($coupons)) {
     		$questionmark = '';
 		    for ($i = 0;$i < count(array_keys($coupons))-1;$i++) { 
 			    $questionmark .= '?, '; 
@@ -76,6 +77,17 @@ class Api_model2 extends CI_Model {
             $sp_coupons = '';
 		}
 		
+        if(is_array($benefits)) {
+    		$questionmark = '';
+		    for ($i = 0;$i < count(array_keys($benefits))-1;$i++) { 
+			    $questionmark .= '?, '; 
+		    }
+		    $questionmark .= '? '; 
+            $sp_benefits = $sp_arr['benefits'].$questionmark;
+		} else {
+            $sp_benefits = '';
+		}
+
 		// 자~~ 이제 들어갑니다. 시작~~
 		// transaction start
 		$this->db->trans_start();
@@ -96,6 +108,11 @@ class Api_model2 extends CI_Model {
 		}
         if(is_array($cards)) $this->db->query($sp_cards,$cards);
         if(is_array($coupons)) $this->db->query($sp_coupons,$coupons);
+        if(is_array($benefits)) {
+			for ($i = 0;$i < count($benefits);$i++) {
+			    $this->db->query($sp_benefits,$benefits[$i]);
+			}
+		}
         // transaction end
 		$this->db->trans_complete();
 
