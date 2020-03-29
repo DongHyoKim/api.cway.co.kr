@@ -271,7 +271,7 @@ class Api extends CT_Controller {
             writeLog("[{$sLogFileId}] coupons= 데이터가 없습니다.", $sLogPath, $bLogable);
 		}
 		// benefits
-		if (!empty($benefits_params) {
+		if (!empty($benefits_params)) {
     		for ($i = 0;$i < count($benefits_params);$i++) {
 			    writeLog("[{$sLogFileId}] benefits[".$i."] = " . json_encode(implode( '|', $benefits_params[$i] )), $sLogPath, $bLogable);
 		    }
