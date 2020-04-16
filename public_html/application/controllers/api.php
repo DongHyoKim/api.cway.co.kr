@@ -215,7 +215,12 @@ class Api extends CT_Controller {
 		//echo "coupons_param : <br>\n";print_r($coupons_param);echo"<br>\n<br>\n";
 		//echo "benefits_params : <br>\n";print_r($benefits_params);echo"<br>\n<br>\n";
         //exit;
-
+        if (empty($Products_params)) $Products_params ='';
+		if (empty($options_params)) $options_params ='';
+		if (empty($payments_params)) $payments_params ='';
+        if (empty($cards_param)) $cards_param ='';
+		if (empty($coupons_param)) $coupons_param ='';
+        if (empty($benefits_params)) $benefits_params ='';
 		//model로 던져 DB에 트랜잭션 처리를 위해 한방에 처리(단 널배열 처리방법 고민 is_array로 해결함.)
 		//$insertDB = $this->API->insertDB($order_param, $Products_params, $options_params, $payments_params, $cards_param, $coupons_param, $benefits_params);
 		$insertDB = $this->API->insertDB($order_param, $Products_params, $options_params, $payments_params, $cards_param, $coupons_param, $benefits_params);

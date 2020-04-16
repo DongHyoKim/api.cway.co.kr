@@ -73,7 +73,7 @@ class Api_model2 extends CI_Model {
 			}
 		}
         // coupons
-		if(!empty($cards)) {
+		if(!empty($coupons)) {
 		    for ($j = 0;$j < count($coupons);$j++) {
                 if(empty($coupons[$j])) $j++;
     		    $questionmark = '';

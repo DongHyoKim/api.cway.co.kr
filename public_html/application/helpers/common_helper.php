@@ -349,12 +349,13 @@ function arrange_param($arr,$arrtype)
         );
 
 	} else if ($arrtype == "benefits") {
-
-        if (isset($arr['additionalInfo']['cpt_amount'])) {
-			$cpt_amount = $arr['additionalInfo']['cpt_amount'];         // 적립총액
+        
+        if (isset($arr['approvalInfo']['cpt_amount'])) {
+			$cpt_amount = $arr['approvalInfo']['cpt_amount'];         // 적립총액
 		} else {
 			$cpt_amount = 0;
 		}
+
 		//if (substr($arr['mediaNo'],1,3) == '700' && $cpt_amount != 0) { // 적립총액이 0이 아니고 조합원번호의 첫3자리가 700인 경우만
     	$params = array(
             'univcode'               => $arr['univcode'],           // benefits key  대학코드*          s5
