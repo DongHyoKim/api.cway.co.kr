@@ -6,7 +6,7 @@ class Api_model2 extends CI_Model {
     }
 
     // insertDB
-    //function insertDB($order,$products,$options,$payments,$cards,$coupons) {
+	//function insertDB($order, $products, $options, $payments, $cards, $coupons, $benefits) {
 	function insertDB($order, $products, $options, $payments, $cards, $coupons, $benefits) {
 
 		global $db;
@@ -23,92 +23,117 @@ class Api_model2 extends CI_Model {
 			'benefits'  => "[VENDINGM].[dbo].[SP_ITMS_PROFITSALETOTAL];1 ",
 		);
 		// '?'를 배열의 키갯수 만큼 붙이자!!
+		// order
 		$questionmark = '';
 		for ($i = 0;$i < count(array_keys($order))-1;$i++) { 
 			$questionmark .= '?, '; 
 		}
 		$questionmark .= '? '; 
         $sp_order = $sp_arr['order'].$questionmark;
-
+        
+		// products
 		$questionmark = '';
 		for ($i = 0;$i < count(array_keys($products['0']))-1;$i++) { 
 			$questionmark .= '?, '; 
 		}
 		$questionmark .= '? '; 
         $sp_products = $sp_arr['products'].$questionmark;
-   		
-		$questionmark = '';
-		for ($i = 0;$i < count(array_keys($options['0']['0']))-1;$i++) { 
-			$questionmark .= '?, ';
-		}
-		$questionmark .= '? ';   // 34
-        $sp_options = $sp_arr['options'].$questionmark;
 
+		if(is_array($options)) {
+		    for ($j = 0;$j < count($options);$j++) {
+                if(empty($options[$j])) $j++;
+			    for ($k = 0;$k <count($options[$j]);$k++) {
+                    if(empty($options[$j][$k])) $k++;
+				    $questionmark = '';
+	                for ($i = 0;$i < count(array_keys($options[$j][$k]))-1;$i++) { 
+	                    $questionmark .= '?, ';
+		            }
+		            $questionmark .= '? ';   // 34
+                    $sp_options = $sp_arr['options'].$questionmark;
+		        }
+		    }
+		}
+        // payments
 		$questionmark = '';
 		for ($i = 0;$i < count(array_keys($payments['0']))-1;$i++) { 
 			$questionmark .= '?, '; 
 		}
 		$questionmark .= '? '; 
         $sp_payments = $sp_arr['payments'].$questionmark;
-
-        if(is_array($cards)) {
-			$questionmark = '';
-		    for ($i = 0;$i < count(array_keys($cards))-1;$i++) { 
-			    $questionmark .= '?, '; 
-		    }
-		    $questionmark .= '? '; 
-            $sp_cards = $sp_arr['cards'].$questionmark;
-		} else {
-            $sp_cards = '';
+		// cards
+		if(!empty($cards)) {
+		    for ($j = 0;$j < count($cards);$j++) {
+                if(empty($cards[$j])) $j++;
+			    $questionmark = '';
+		        for ($i = 0;$i < count(array_keys($cards[$j]))-1;$i++) { 
+			        $questionmark .= '?, '; 
+		        }
+		        $questionmark .= '? '; 
+                $sp_cards = $sp_arr['cards'].$questionmark;
+			}
 		}
-
-        //echo $sp_cards;
-		//print_r($cards);
-		//exit;
-
-        if(is_array($coupons)) {
-    		$questionmark = '';
-		    for ($i = 0;$i < count(array_keys($coupons))-1;$i++) { 
-			    $questionmark .= '?, '; 
-		    }
-		    $questionmark .= '? '; 
-            $sp_coupons = $sp_arr['coupons'].$questionmark;
-		} else {
-            $sp_coupons = '';
+        // coupons
+		if(!empty($coupons)) {
+		    for ($j = 0;$j < count($coupons);$j++) {
+                if(empty($coupons[$j])) $j++;
+    		    $questionmark = '';
+		        for ($i = 0;$i < count(array_keys($coupons[$j]))-1;$i++) { 
+			        $questionmark .= '?, '; 
+		        }
+		        $questionmark .= '? '; 
+                $sp_coupons = $sp_arr['coupons'].$questionmark;
+			}
 		}
-		
-        if(is_array($benefits)) {
+		// benefits
+        if(!empty($benefits)) {
     		$questionmark = '';
-		    for ($i = 0;$i < count(array_keys($benefits))-1;$i++) { 
+		    for ($i = 0;$i < count(array_keys($benefits['0']))-1;$i++) { 
 			    $questionmark .= '?, '; 
 		    }
 		    $questionmark .= '? '; 
             $sp_benefits = $sp_arr['benefits'].$questionmark;
-		} else {
-            $sp_benefits = '';
-		}
+        }
 
 		// 자~~ 이제 들어갑니다. 시작~~
 		// transaction start
 		$this->db->trans_start();
         // insert DataBase
+		// order
         $this->db->query($sp_order,$order);
+		// products
 		for ($i = 0;$i < count($products);$i++) { 
 			$this->db->query($sp_products,$products[$i]); 
 		}
-		if (is_array($options)) {
-			for ($i = 0;$i < count($options);$i++) {
-	            for ($j = 0;$j < count($options[$i]);$j++) {
-			        $this->db->query($sp_options,$options[$i][$j]);
-			    }
+		// options
+		if(is_array($options)) {
+		    for ($i = 0;$i < count($options);$i++) {
+                if(empty($options[$i])) $i++;
+			    for ($j = 0;$j <count($options[$i]);$j++) {
+                    if(empty($options[$i][$j])) $j++;
+                    $this->db->query($sp_options,$options[$i][$j]);
+		        }
 		    }
 		}
+		// payments
 		for ($i = 0;$i < count($payments);$i++) { 
 			$this->db->query($sp_payments,$payments[$i]); 
 		}
-        if(is_array($cards)) $this->db->query($sp_cards,$cards);
-        if(is_array($coupons)) $this->db->query($sp_coupons,$coupons);
-        if(is_array($benefits)) {
+		// cards
+        if(!empty($cards)) {
+			for ($i = 0;$i < count($cards);$i++) {
+                if(empty($cards[$i])) $i++;
+			    $this->db->query($sp_cards,$cards[$i]);
+			}
+		}
+		// coupons
+        if(!empty($coupons)) {
+			for ($i = 0;$i < count($coupons);$i++) {
+                if(empty($coupons[$i])) $i++;			
+			    $this->db->query($sp_coupons,$coupons[$i]);
+			}
+		}
+		// benefits
+        if(!empty($benefits)) {
 			for ($i = 0;$i < count($benefits);$i++) {
 			    $this->db->query($sp_benefits,$benefits[$i]);
 			}
@@ -117,9 +142,6 @@ class Api_model2 extends CI_Model {
 		$this->db->trans_complete();
 
 		return $this->db->trans_status()? "0000" : -1;
-    }
+    } 
 
 }
-
-/* End of file api_model2.php */
-/* Location: ./application/models/api_model2.php */

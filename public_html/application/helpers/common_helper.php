@@ -349,24 +349,31 @@ function arrange_param($arr,$arrtype)
         );
 
 	} else if ($arrtype == "benefits") {
+        
+        if (isset($arr['approvalInfo']['cpt_amount'])) {
+			$cpt_amount = $arr['approvalInfo']['cpt_amount'];         // 적립총액
+		} else {
+			$cpt_amount = 0;
+		}
 
-		$params = array(
+		//if (substr($arr['mediaNo'],1,3) == '700' && $cpt_amount != 0) { // 적립총액이 0이 아니고 조합원번호의 첫3자리가 700인 경우만
+    	$params = array(
             'univcode'               => $arr['univcode'],           // benefits key  대학코드*          s5
             'saleDay'                => $arr['saleDay'],            // benefits key  영업일*            s10  YYYY-MM-DD
             'storeCode'              => trim($arr['franchiseCd']),  // benefits key  지점코드           s30  연동처리 ********명칭변경 주의
             'posNo'                  => trim($arr['posNo']),        // benefits key  포스번호*          s5   연동 기기번호
             'billNo'                 => trim($arr['billNo']),       // benefits key  영수번호*          s30
             'paymentSeq'             => $arr['paymentSeq'],         // benefits key  결재순번*          n
-    		'createdAt'              => trim($arr['createdAt']),    //             등록일              s30
-            'updatedAt'              => trim($arr['updatedAt']),    //             수정일              s30
+    	    'createdAt'              => trim($arr['createdAt']),    //               등록일             s30
+            'updatedAt'              => trim($arr['updatedAt']),    //               수정일             s30
             'moduleId'               => $arr['moduleId'],           //               포인트적립모듈
             'CPT_MEMBER'             => $arr['mediaNo'],            //               조합원번호
-			'CPT_AMOUNT'             => implode('|',$arr['additionalInfo']), //      적립가능 상품의 총금액
-		);
+		    'CPT_AMOUNT'             => $cpt_amount,                //               적립가능 상품의 총금액
+    	);
+		//} else {
+		//	$params = '';
+		//}
 
 	}
-    return $params;	
+    return $params;
 }
-
-/* End of file common_helper.php */
-/* Location: ./application/helpers/common_helper.php */

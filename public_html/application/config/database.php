@@ -86,18 +86,20 @@ if(!isset($_POST['UnivCode'])) {
 }
 
 $DB_CONNECTION = array(
-    "00106"=> array("hostname"=>"0010601.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00106001") //KangWon =>연결됨
-  , "00114"=> array("hostname"=>"0011401.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00114001") //KyungSang
+    "00106"=> array("hostname"=>"0010601.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00106001") //KangWon =>연결됨
+  , "00114"=> array("hostname"=>"0011401.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00114001") //KyungSang
   , "00121"=> array("hostname"=>"0012101.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00121001") //BuKyung
-  , "00117"=> array("hostname"=>"0011701.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00117001") //SangJi
+  , "00117"=> array("hostname"=>"0011701.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00117001") //SangJi
   , "00113"=> array("hostname"=>"0011301.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00113001") //Ewha =>연결됨
-  , "00116"=> array("hostname"=>"0011601.cway.kr,8433",  "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00116001") //JeonNam =>연결됨
-  , "00103"=> array("hostname"=>"0010301.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00103001") //JeonBuk
-  , "00111"=> array("hostname"=>"0011101.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00111001") //Jeju
-  , "00123"=> array("hostname"=>"0012301.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00123001") //ChungNam
-  , "00120"=> array("hostname"=>"0012001.cway.kr,8433", "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00120001") //ChungBuk
-  , "00112"=> array("hostname"=>"0011201.cway.kr,8433",  "username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00112001") //Hufs
+  , "00116"=> array("hostname"=>"0011601.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00116001") //JeonNam =>연결됨
+  , "00103"=> array("hostname"=>"0010301.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00103001") //JeonBuk
+  , "00111"=> array("hostname"=>"0010001.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00111001") //Jeju_test
+  //, "00111"=> array("hostname"=>"0011101.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"VENDINGM")    //Jeju
+  , "00123"=> array("hostname"=>"0012301.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00123001") //ChungNam
+  , "00120"=> array("hostname"=>"0012001.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00120001") //ChungBuk
+  , "00112"=> array("hostname"=>"0011201.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT00112001") //Hufs
   , "00100"=> array("hostname"=>"0010001.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"VENDINGM")    //CwayTest
+  , "10100"=> array("hostname"=>"1010001.cway.kr,8433","username"=>"dmk","password"=>"!@dmk8191","database"=>"CPT10100001") //테스트모드
 );
 
 if(! array_key_exists ($_POST['UnivCode'] , $DB_CONNECTION) ){
@@ -123,6 +125,3 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
-
-/* End of file database.php */
-/* Location: ./application/config/database.php */
