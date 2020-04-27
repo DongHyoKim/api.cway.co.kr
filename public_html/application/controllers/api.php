@@ -261,7 +261,11 @@ class Api extends CT_Controller {
 		if(!empty($cards_param)) {
             for ($i = 0;$i < count($cards_param);$i++) {
 				if(empty($cards_param[$i])) $i++;
+<<<<<<< HEAD
                 writeLog("[{$sLogFileId}] cards=" . json_encode(implode( '|', $cards_param[$i] ),JSON_UNESCAPED_UNICODE), $sLogPath, $bLogable);
+=======
+                writeLog("[{$sLogFileId}] cards=" . json_encode(implode( '|', $cards_param[$i] )), $sLogPath, $bLogable);
+>>>>>>> 2dfb488c838a63c0653f0eed7ae684280514da99
 			}
 		} else {
             writeLog("[{$sLogFileId}] cards= 데이터가 없습니다.", $sLogPath, $bLogable);
@@ -270,7 +274,11 @@ class Api extends CT_Controller {
 		if(!empty($coupons_param)) {
             for ($i = 0;$i < count($coupons_param);$i++) {
 				if(empty($coupons_param[$i])) $i++;
+<<<<<<< HEAD
 			    writeLog("[{$sLogFileId}] coupons=" . json_encode(implode( '|', $coupons_param[$i] ),JSON_UNESCAPED_UNICODE), $sLogPath, $bLogable);
+=======
+			    writeLog("[{$sLogFileId}] coupons=" . json_encode(implode( '|', $coupons_param[$i] )), $sLogPath, $bLogable);
+>>>>>>> 2dfb488c838a63c0653f0eed7ae684280514da99
 			}
 		} else {
             writeLog("[{$sLogFileId}] coupons= 데이터가 없습니다.", $sLogPath, $bLogable);
@@ -285,7 +293,11 @@ class Api extends CT_Controller {
 		}
 
         // Ends of Log Write
+<<<<<<< HEAD
 		writeLog("[{$sLogFileId}] result=" . json_encode($message,JSON_UNESCAPED_UNICODE), $sLogPath, $bLogable);
+=======
+		writeLog("[{$sLogFileId}] result=" . json_encode($message), $sLogPath, $bLogable);
+>>>>>>> 2dfb488c838a63c0653f0eed7ae684280514da99
         writeLog("[{$sLogFileId}] -------------------------------- END --------------------------------", $sLogPath, $bLogable);
 
 		echo json_encode($message);
